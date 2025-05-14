@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CalculusQuest_0: 4898158642939590465
+      CalculusQuest_1: -5516953950056897091
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
