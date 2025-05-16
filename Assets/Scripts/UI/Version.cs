@@ -4,6 +4,14 @@ using UnityEngine;
 public class Version : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI textBox;
     private void Awake() {
-        textBox.text = "Version: " + GameManager.version;
+        string versionText = "";
+
+        if (GameManager.developmentBuild) {
+            versionText += "Development Build on " + GameManager.buildDate + " - ";
+        }
+
+        versionText += "Version: " + GameManager.version;
+
+        textBox.text = versionText;
     }
 }

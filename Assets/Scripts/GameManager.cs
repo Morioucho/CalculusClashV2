@@ -4,6 +4,9 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
     public const string version = "1.0.0";
+    public const bool developmentBuild = true;
+    public const string buildDate = "05-15-2025";
+
     public float timeOfDay = 0.0f;
 
     void Start() {

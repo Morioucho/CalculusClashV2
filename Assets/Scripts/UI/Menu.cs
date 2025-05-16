@@ -25,6 +25,6 @@ public class MenuScript : MonoBehaviour {
 
     private IEnumerator Transition() {
         yield return StartCoroutine(FadeOutEffect.instance.FadeOut());
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("InitialStory");
     }
 }
