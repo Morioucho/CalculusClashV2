@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour {
-    public void PlayGame() {
+    public void Play() {
         Debug.Log("Play game clicked.");
         SceneManager.LoadScene("Game");
     }
@@ -17,7 +17,7 @@ public class MenuScript : MonoBehaviour {
         SceneManager.LoadScene("Options");
     }
 
-    public void QuitGame() {
+    public void Quit() {
         Debug.Log("Quitting game.");
         Application.Quit();
     }

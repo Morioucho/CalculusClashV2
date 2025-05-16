@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 012ab39709200ae4ab0ce4cc637a7f8f
+guid: 4da892b8d4b4c934d917549be2750fdf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4898158642939590465
-    second: CalculusQuest_0
-  - first:
-      213: -5516953950056897091
-    second: CalculusQuest_1
+      213: 5027292261882887975
+    second: StarryBackground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CalculusQuest_0
+      name: StarryBackground_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 138
-        width: 364
-        height: 80
+        x: 0
+        y: 0
+        width: 1920
+        height: 960
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1477ced8551c9f340800000000000000
-      internalID: 4898158642939590465
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CalculusQuest_1
-      rect:
-        serializedVersion: 2
-        x: 243
-        y: 47
-        width: 267
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: db5abaccc97df63b0800000000000000
-      internalID: -5516953950056897091
+      spriteID: 72f799b2da784c540800000000000000
+      internalID: 5027292261882887975
       vertices: []
       indices: 
       edges: []
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CalculusQuest_0: 4898158642939590465
-      CalculusQuest_1: -5516953950056897091
+      StarryBackground_0: 5027292261882887975
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
