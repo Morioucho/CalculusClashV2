@@ -20,7 +20,7 @@ public class HoverEffect : MonoBehaviour {
             outline.enabled = true;
 
             if(Arrow.instance != null) {
-                Arrow.instance.moveTo(arrowRectTransform);
+                Arrow.instance.MoveTo(arrowRectTransform);
             }
         }
     }

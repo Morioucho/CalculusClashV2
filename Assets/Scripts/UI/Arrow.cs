@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour{
+public class Arrow : MonoBehaviour {
     public static Arrow instance;
 
     [Header("Arrow Settings")]
@@ -30,7 +30,7 @@ public class Arrow : MonoBehaviour{
         }
     }
 
-    public void moveTo(RectTransform button) {
+    public void MoveTo(RectTransform button) {
         if (!loaded) {
             loaded = true;
         }

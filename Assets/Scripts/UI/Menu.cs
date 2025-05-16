@@ -1,10 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour {
     public void Play() {
         Debug.Log("Play game clicked.");
-        SceneManager.LoadScene("Game");
+        StartCoroutine(Transition());
     }
 
     public void Credits() {
@@ -20,5 +21,10 @@ public class MenuScript : MonoBehaviour {
     public void Quit() {
         Debug.Log("Quitting game.");
         Application.Quit();
+    }
+
+    private IEnumerator Transition() {
+        yield return StartCoroutine(FadeOutEffect.instance.FadeOut());
+        SceneManager.LoadScene("Game");
     }
 }
