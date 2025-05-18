@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CalculusClash_0: -5117633881332353392
+      CalculusClash_1: 5636687944248067964
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
