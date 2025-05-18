@@ -1,6 +1,6 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class FadeOutEffect : MonoBehaviour {
     public static FadeOutEffect instance;

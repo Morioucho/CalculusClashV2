@@ -1,16 +1,16 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public class Version : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI textBox;
     private void Awake() {
         string versionText = "";
 
-        if (GameManager.developmentBuild) {
-            versionText += "Development Build on " + GameManager.buildDate + " - ";
-        }
-
         versionText += "Version: " + GameManager.version;
+
+        if (GameManager.developmentBuild) {
+            versionText += " (DEV) " + GameManager.buildDate;
+        }
 
         textBox.text = versionText;
     }

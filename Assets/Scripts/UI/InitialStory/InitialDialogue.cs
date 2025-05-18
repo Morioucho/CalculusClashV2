@@ -1,8 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEngine.SceneManagement;
 using System.IO;
 
 public class InitialDialogue : MonoBehaviour {
@@ -19,15 +19,6 @@ public class InitialDialogue : MonoBehaviour {
         dialogueText = dialogueBox.GetComponentInChildren<TextMeshProUGUI>();
 
         StartCoroutine(LoadDialogues());
-
-        /*
-        // Create a better system later that reads from a file or something..
-        dialogues.Add("AP Calc is so hard…. What are these symbols man…");
-        dialogues.Add("It’s 3 AM, but I need to keep pushing.");
-        dialogues.Add("Just… a little… longer…");
-        */
-
-        // PlayDialogue();
     }
 
     public void PlayDialogue() {
