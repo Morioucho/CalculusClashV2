@@ -609,7 +609,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 256935440}
-  fadeDuration: 2.25
 --- !u!4 &936767760
 Transform:
   m_ObjectHideFlags: 0
@@ -1020,7 +1019,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1647713463}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
