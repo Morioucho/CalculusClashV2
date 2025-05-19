@@ -6,6 +6,7 @@ public class MenuScript : MonoBehaviour {
     void Start() {
         GameManager.GetInstance().PlayMusic();
     }
+    
     public void Play() {
         Debug.Log("Play game clicked.");
 

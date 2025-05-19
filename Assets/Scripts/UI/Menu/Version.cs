@@ -3,6 +3,7 @@ using TMPro;
 
 public class Version : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI textBox;
+    
     private void Awake() {
         string versionText = "";
 

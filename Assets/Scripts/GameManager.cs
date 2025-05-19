@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     public const string version = "1.1.0";
     public const bool developmentBuild = true;
-    public const string buildDate = "05-16-2025";
+    public const string buildDate = "05-19-2025";
 
     public float timeOfDay = 0.0f;
 
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
         return instance;
     }
 
-    void Update(){
+    void Update() {
         timeOfDay += Time.deltaTime / 60f;
 
         if(timeOfDay >= 24f) {
