@@ -6,7 +6,6 @@ public class FadeOutEffect : MonoBehaviour {
     public static FadeOutEffect instance;
 
     [SerializeField] private GameObject panel;
-    [SerializeField] private float fadeDuration;
 
     private Image panelImage;
 
@@ -24,7 +23,11 @@ public class FadeOutEffect : MonoBehaviour {
         this.panelImage = panel.GetComponent<Image>();
     }
 
-    public IEnumerator FadeOut() {
+    public static FadeOutEffect GetInstance() {
+        return instance;
+    }
+
+    public IEnumerator FadeOut(int fadeDuration) {
         panel.SetActive(true);
 
         Color color = panelImage.color;

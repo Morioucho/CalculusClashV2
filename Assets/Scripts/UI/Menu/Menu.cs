@@ -3,8 +3,13 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MenuScript : MonoBehaviour {
+    void Start() {
+        GameManager.GetInstance().PlayMusic();
+    }
+    
     public void Play() {
         Debug.Log("Play game clicked.");
+
         StartCoroutine(Transition());
     }
 
@@ -24,7 +29,14 @@ public class MenuScript : MonoBehaviour {
     }
 
     private IEnumerator Transition() {
-        yield return StartCoroutine(FadeOutEffect.instance.FadeOut());
+        const int fadeOutDuration = 2;
+
+        Coroutine fadeMusic = StartCoroutine(GameManager.GetInstance().FadeOutMusic(fadeOutDuration));
+        Coroutine fadeBackground = StartCoroutine(FadeOutEffect.GetInstance().FadeOut(fadeOutDuration));
+
+        yield return fadeMusic;
+        yield return fadeBackground;
+
         SceneManager.LoadScene("InitialStory");
     }
 }
