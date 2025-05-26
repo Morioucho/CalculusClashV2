@@ -47,7 +47,7 @@ public class CombatManager : MonoBehaviour {
 
     private float typewriterSpeed = 0.08f;
 
-    private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, End }
+    private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, End }
     private CombatState state = CombatState.Dialogue;
 
     private QuestionData currentQuestion;
@@ -131,10 +131,15 @@ public class CombatManager : MonoBehaviour {
             case CombatState.Question:
                 HandleQuestionInput();
                 break;
+
+            case CombatState.ShowTip:
+                HandleDialogueInput();
+                break;
         }
 
         UpdateStar();
     }
+
 
     // UPDATE METHODS
     void UpdateQuestionButtonSprites() {
@@ -166,9 +171,11 @@ public class CombatManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
             if (buttonIndex < buttons.Count - 1) buttonIndex++;
         }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
             if (buttonIndex > 0) buttonIndex--;
         }
+
         UpdateButtonSprites();
 
         if (Input.GetKeyDown(KeyCode.Return)) {
@@ -177,6 +184,7 @@ public class CombatManager : MonoBehaviour {
                     StartQuestion();
                     break;
                 case 1: // Help
+                    ShowTip();
                     break;
                 case 2: // Item
                     break;
@@ -185,6 +193,7 @@ public class CombatManager : MonoBehaviour {
             }
         }
     }
+
 
     void HandleQuestionInput() {
         if (!isQuestionEnabled) return;
@@ -292,6 +301,27 @@ public class CombatManager : MonoBehaviour {
             yield return new WaitForSeconds(typewriterSpeed);
         }
     }
+    private IEnumerator ShowTipCoroutine(string tip) {
+        textbox.SetActive(true);
+        questionBox.SetActive(false);
+
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
+
+        yield return StartCoroutine(TypeText(tip));
+
+        waitingForEnter = true;
+        while (waitingForEnter) {
+            yield return null;
+        }
+
+        state = CombatState.PlayerChoice;
+        EnablePlayerChoice();
+    }
+
 
     // MISC
     void StartQuestion() {
@@ -361,6 +391,14 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
     }
+
+    void ShowTip() {
+        isButtonEnabled = false;
+        state = CombatState.ShowTip;
+        string tip = TipLoader.GetRandomTip(currEnemy.unit);
+        StartCoroutine(ShowTipCoroutine(tip));
+    }
+
 
     void EndCombat() {
         state = CombatState.End;
