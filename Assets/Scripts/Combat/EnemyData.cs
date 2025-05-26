@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyData {
     public string id;
     public string name;
+    public int unit;
     public int health;
     public DialogueLine[] dialogue;
     public string sprite;

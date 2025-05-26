@@ -1,6 +1,7 @@
 {
   "id": "dummy",
   "name": "Dummy",
+  "unit": 1,
   "health": 20,
   "dialogue": [
     {
