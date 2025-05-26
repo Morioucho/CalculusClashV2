@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
 
     public float timeOfDay = 0.0f;
 
+    public string encounterEnemyID;
+    public string previousScene;
+
     void Awake() {
         if (instance == null) {
             lock (this) {
@@ -43,6 +46,11 @@ public class GameManager : MonoBehaviour {
         if (!this.musicSource.isPlaying) {
             this.musicSource.Play();
         }
+    }
+
+    public void SetEncounter(string enemyId, string returnScene) {
+        this.encounterEnemyID = enemyId;
+        this.previousScene = returnScene;
     }
 
     public IEnumerator FadeOutMusic(int seconds) {
