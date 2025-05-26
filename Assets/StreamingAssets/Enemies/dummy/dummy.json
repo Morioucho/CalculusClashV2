@@ -1,0 +1,34 @@
+{
+  "id": "dummy",
+  "name": "Dummy",
+  "health": 20,
+  "dialogue": [
+    {
+      "text": "doko mademo chase dih",
+      "duration": 2
+    },
+    {
+      "text": "itsumo chase dih",
+      "duration": 2
+    },
+    {
+      "text": "ore wa chase dih",
+      "duration": 2
+    },
+    {
+      "text": "nigeba wa nai",
+      "duration": 2
+    },
+        {
+      "text": "hashiridase chase dih",
+      "duration": 2
+    },
+    {
+      "text": "asu mo chase dih",
+      "duration": 2
+    }
+  ],
+  "sprite": "dummy.png",
+  "music": "dummy.mp3",
+  "musicVolume": 0.5
+}
