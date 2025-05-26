@@ -18,6 +18,7 @@ public class CombatManager : MonoBehaviour {
     public GameObject textbox;
     public GameObject questionBox;
     public GameObject questionPanel;
+    public GameObject starText;
 
     public List<GameObject> buttons;
     public List<GameObject> questionButtons;
@@ -35,6 +36,8 @@ public class CombatManager : MonoBehaviour {
 
     private bool isButtonEnabled = false;
     private bool isQuestionEnabled = false;
+    private bool skipTypewriter = false;
+    private bool waitingForEnter = false;
 
     private List<Sprite> selectedSprites;
     private List<Sprite> unselectedSprites;
@@ -42,7 +45,7 @@ public class CombatManager : MonoBehaviour {
     private List<Sprite> questionSelectedSprites;
     private List<Sprite> questionUnselectedSprites;
 
-    private bool optionLocked = false;
+    private float typewriterSpeed = 0.08f;
 
     private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, End }
     private CombatState state = CombatState.Dialogue;
@@ -57,6 +60,16 @@ public class CombatManager : MonoBehaviour {
             currEnemyHP = currEnemy.health;
             Sprite sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
             enemyImage.sprite = sprite;
+
+            enemyImage.preserveAspect = true;
+
+            RectTransform imageRect = enemyImage.rectTransform;
+            float targetHeight = imageRect.rect.height;
+
+            if (sprite != null && imageRect != null) {
+                float aspect = sprite.rect.width / sprite.rect.height;
+                imageRect.sizeDelta = new Vector2(targetHeight * aspect, targetHeight);
+            }
         }
 
         // Hide the question panel by default
@@ -105,6 +118,9 @@ public class CombatManager : MonoBehaviour {
 
     void Update() {
         switch (state) {
+            case CombatState.Dialogue:
+                HandleDialogueInput();
+                break;
             case CombatState.PlayerChoice:
                 HandlePlayerChoiceInput();
                 break;
@@ -112,47 +128,34 @@ public class CombatManager : MonoBehaviour {
                 HandleQuestionInput();
                 break;
         }
+
+        UpdateStar();
     }
 
-    public void NextDialogue() {
-        dialogueIndex = 0;
-        state = CombatState.Dialogue;
-        StartCoroutine(ShowDialogue());
-    }
-
-    private IEnumerator ShowDialogue() {
-        textbox.SetActive(true);
-        questionBox.SetActive(false);
-        if (questionPanel != null)
-            questionPanel.SetActive(false);
-        if (enemyImage != null)
-            enemyImage.gameObject.SetActive(true);
-
-        while (dialogueIndex < currEnemy.dialogue.Length) {
-            dialogueText.text = currEnemy.dialogue[dialogueIndex].text;
-            float waitTime = currEnemy.dialogue[dialogueIndex].duration;
-            dialogueIndex++;
-            yield return new WaitForSeconds(waitTime);
+    // UPDATE METHODS
+    void UpdateQuestionButtonSprites() {
+        for (int i = 0; i < questionButtons.Count; ++i) {
+            Image img = questionButtons[i].GetComponent<Image>();
+            img.sprite = (i == questionButtonIndex) ? questionSelectedSprites[i] : questionUnselectedSprites[i];
         }
-        state = CombatState.PlayerChoice;
-
-        EnablePlayerChoice();
     }
 
-    void EnablePlayerChoice() {
-        isButtonEnabled = true;
-        buttonIndex = 0;
-
-        UpdateButtonSprites();
-
-        textbox.SetActive(true);
-        questionBox.SetActive(false);
-        if (questionPanel != null)
-            questionPanel.SetActive(false);
-        if (enemyImage != null)
-            enemyImage.gameObject.SetActive(true);
+    void UpdateStar() {
+        if (this.dialogueText.text == null || this.dialogueText.text == "") {
+            starText.SetActive(false);
+        } else {
+            starText.SetActive(true);
+        }
     }
 
+    void UpdateButtonSprites() {
+        for (int i = 0; i < buttons.Count; ++i) {
+            Image img = buttons[i].GetComponent<Image>();
+            img.sprite = (i == buttonIndex) ? selectedSprites[i] : unselectedSprites[i];
+        }
+    }
+
+    // HANDLE METHODS
     void HandlePlayerChoiceInput() {
         if (!isButtonEnabled) return;
 
@@ -177,44 +180,6 @@ public class CombatManager : MonoBehaviour {
                     break;
             }
         }
-    }
-
-    void UpdateButtonSprites() {
-        for (int i = 0; i < buttons.Count; ++i) {
-            Image img = buttons[i].GetComponent<Image>();
-            img.sprite = (i == buttonIndex) ? selectedSprites[i] : unselectedSprites[i];
-        }
-    }
-
-    void StartQuestion() {
-        isButtonEnabled = false;
-        isQuestionEnabled = true;
-        state = CombatState.Question;
-
-        Sprite questionSprite;
-        currentQuestion = QuestionLoader.GetRandomQuestion(currEnemy.unit, out questionSprite);
-        correctAnswerIndex = currentQuestion.correct;
-
-        textbox.SetActive(false);
-        questionBox.SetActive(true);
-        questionImage.sprite = questionSprite;
-
-        questionImage.preserveAspect = true;
-        if (questionPanel != null && questionImage != null) {
-            RectTransform panelRect = questionPanel.GetComponent<RectTransform>();
-            RectTransform imageRect = questionImage.rectTransform;
-            if (panelRect != null && imageRect != null) {
-                imageRect.sizeDelta = panelRect.rect.size;
-            }
-        }
-
-        if (questionPanel != null)
-            questionPanel.SetActive(true);
-        if (enemyImage != null)
-            enemyImage.gameObject.SetActive(false);
-
-        questionButtonIndex = 0;
-        UpdateQuestionButtonSprites();
     }
 
     void HandleQuestionInput() {
@@ -273,11 +238,105 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
-    void UpdateQuestionButtonSprites() {
-        for (int i = 0; i < questionButtons.Count; ++i) {
-            Image img = questionButtons[i].GetComponent<Image>();
-            img.sprite = (i == questionButtonIndex) ? questionSelectedSprites[i] : questionUnselectedSprites[i];
+    void HandleDialogueInput() {
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            if (waitingForEnter) {
+                waitingForEnter = false;
+            } else {
+                skipTypewriter = true;
+            }
         }
+    }
+
+    // COROUTINES
+    private IEnumerator ShowDialogue() {
+        textbox.SetActive(true);
+        questionBox.SetActive(false);
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
+
+        while (dialogueIndex < currEnemy.dialogue.Length) {
+            yield return StartCoroutine(TypeText(currEnemy.dialogue[dialogueIndex].text));
+            waitingForEnter = true;
+
+            while (waitingForEnter) {
+                yield return null;
+            }
+
+            dialogueIndex++;
+        }
+        state = CombatState.PlayerChoice;
+        EnablePlayerChoice();
+    }
+
+    private IEnumerator TypeText(string fullText) {
+        dialogueText.text = "";
+        skipTypewriter = false;
+
+        foreach (char c in fullText) {
+            if (skipTypewriter) {
+                dialogueText.text = fullText;
+                break;
+            }
+
+            dialogueText.text += c;
+
+            yield return new WaitForSeconds(typewriterSpeed);
+        }
+    }
+
+    // MISC
+    void StartQuestion() {
+        isButtonEnabled = false;
+        isQuestionEnabled = true;
+        state = CombatState.Question;
+
+        Sprite questionSprite;
+        currentQuestion = QuestionLoader.GetRandomQuestion(currEnemy.unit, out questionSprite);
+        correctAnswerIndex = currentQuestion.correct;
+
+        textbox.SetActive(false);
+        questionBox.SetActive(true);
+        questionImage.sprite = questionSprite;
+
+        questionImage.preserveAspect = true;
+        if (questionPanel != null && questionImage != null) {
+            RectTransform panelRect = questionPanel.GetComponent<RectTransform>();
+            RectTransform imageRect = questionImage.rectTransform;
+            if (panelRect != null && imageRect != null) {
+                imageRect.sizeDelta = panelRect.rect.size;
+            }
+        }
+
+        if (questionPanel != null)
+            questionPanel.SetActive(true);
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(false);
+
+        questionButtonIndex = 0;
+        UpdateQuestionButtonSprites();
+    }
+
+    public void NextDialogue() {
+        dialogueIndex = 0;
+        state = CombatState.Dialogue;
+        StartCoroutine(ShowDialogue());
+    }
+
+    void EnablePlayerChoice() {
+        isButtonEnabled = true;
+        buttonIndex = 0;
+
+        UpdateButtonSprites();
+
+        textbox.SetActive(true);
+        questionBox.SetActive(false);
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
     }
 
     void EnemyAttack() {
