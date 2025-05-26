@@ -84,6 +84,7 @@ public class CombatManager : MonoBehaviour {
         for (int i = 0; i < spriteNames.Length; ++i) {
             Sprite selected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i] + "Selected");
             Sprite unselected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i]);
+
             selectedSprites.Add(selected);
             unselectedSprites.Add(unselected);
         }
@@ -96,6 +97,7 @@ public class CombatManager : MonoBehaviour {
         for (int i = 0; i < questionSpriteNames.Length; ++i) {
             Sprite selected = Resources.Load<Sprite>("UI/Combat/" + questionSpriteNames[i] + "Selected");
             Sprite unselected = Resources.Load<Sprite>("UI/Combat/" + questionSpriteNames[i]);
+
             questionSelectedSprites.Add(selected);
             questionUnselectedSprites.Add(unselected);
         }
@@ -121,9 +123,11 @@ public class CombatManager : MonoBehaviour {
             case CombatState.Dialogue:
                 HandleDialogueInput();
                 break;
+
             case CombatState.PlayerChoice:
                 HandlePlayerChoiceInput();
                 break;
+
             case CombatState.Question:
                 HandleQuestionInput();
                 break;
@@ -252,6 +256,7 @@ public class CombatManager : MonoBehaviour {
     private IEnumerator ShowDialogue() {
         textbox.SetActive(true);
         questionBox.SetActive(false);
+
         if (questionPanel != null)
             questionPanel.SetActive(false);
         if (enemyImage != null)
@@ -267,6 +272,7 @@ public class CombatManager : MonoBehaviour {
 
             dialogueIndex++;
         }
+
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
     }
@@ -305,6 +311,7 @@ public class CombatManager : MonoBehaviour {
         if (questionPanel != null && questionImage != null) {
             RectTransform panelRect = questionPanel.GetComponent<RectTransform>();
             RectTransform imageRect = questionImage.rectTransform;
+
             if (panelRect != null && imageRect != null) {
                 imageRect.sizeDelta = panelRect.rect.size;
             }
@@ -312,6 +319,7 @@ public class CombatManager : MonoBehaviour {
 
         if (questionPanel != null)
             questionPanel.SetActive(true);
+
         if (enemyImage != null)
             enemyImage.gameObject.SetActive(false);
 
@@ -322,6 +330,7 @@ public class CombatManager : MonoBehaviour {
     public void NextDialogue() {
         dialogueIndex = 0;
         state = CombatState.Dialogue;
+
         StartCoroutine(ShowDialogue());
     }
 
@@ -335,6 +344,7 @@ public class CombatManager : MonoBehaviour {
         questionBox.SetActive(false);
         if (questionPanel != null)
             questionPanel.SetActive(false);
+
         if (enemyImage != null)
             enemyImage.gameObject.SetActive(true);
     }
@@ -354,12 +364,14 @@ public class CombatManager : MonoBehaviour {
 
     void EndCombat() {
         state = CombatState.End;
+
         Debug.Log("Enemy Defeated");
         SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
 
     void GameOver() {
         state = CombatState.End;
+
         Debug.Log("Player Defeated");
     }
 }
