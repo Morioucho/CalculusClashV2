@@ -5,15 +5,20 @@ using TMPro;
 
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CombatManager : MonoBehaviour {
     [SerializeField]
     public Image enemyImage;
 
-    [SerializeField]
     public TextMeshProUGUI dialogueText;
+    public TextMeshProUGUI playerLivesText;
+
+    public List<GameObject> buttons;
 
     public int playerLives = 3;
+
+    private int buttonIndex = 0;
 
     private EnemyData currEnemy;
     private AudioSource musicSource;
@@ -21,6 +26,10 @@ public class CombatManager : MonoBehaviour {
     private int currEnemyHP;
     private int dialogueIndex = 0;
     private bool inCombat = false;
+
+    private List<Sprite> selectedSprites;
+    private List<Sprite> unselectedSprites;
+
 
     void Start() {
         // Load the enemy.
@@ -32,6 +41,23 @@ public class CombatManager : MonoBehaviour {
             currEnemyHP = currEnemy.health;
             Sprite sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
             enemyImage.sprite = sprite;
+        }
+
+        // Load button sprites
+        string[] spriteNames = { "Solve", "Help", "Item", "Skip" };
+        selectedSprites = new List<Sprite>();
+        unselectedSprites = new List<Sprite>();
+
+        for (int i = 0; i < spriteNames.Length; ++i) {
+            Sprite selected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i] + "Selected");
+            Sprite unselected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i]);
+
+            if (selected == null || unselected == null) {
+                Debug.LogError("Missing sprite: " + spriteNames[i]);
+            } else {
+                selectedSprites.Add(selected);
+                unselectedSprites.Add(unselected);
+            }
         }
 
         // Load the audio.
@@ -50,6 +76,25 @@ public class CombatManager : MonoBehaviour {
 
         // Start the dialogue.
         NextDialogue();
+    }
+
+    public void Update() {
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
+            if(this.buttonIndex < 3) {
+                this.buttonIndex++;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
+            if(this.buttonIndex > 0) {
+                this.buttonIndex--;
+            }
+        }
+
+        for (int i = 0; i < buttons.Count; ++i) {
+            Image img = buttons[i].GetComponent<Image>();
+            img.sprite = (i == buttonIndex) ? selectedSprites[i] : unselectedSprites[i];
+        }
     }
 
     public void NextDialogue() {
