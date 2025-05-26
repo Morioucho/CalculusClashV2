@@ -1,9 +1,11 @@
 using UnityEngine;
+
 using System.IO;
 
 public static class EnemyLoader {
     public static EnemyData LoadEnemy(string enemyId) {
-        string path = Path.Combine(Application.streamingAssetsPath, "Enemies", enemyId + ".json");
+        string enemyFolder = Path.Combine(Application.streamingAssetsPath, "Enemies", enemyId.ToLower());
+        string path = Path.Combine(enemyFolder, enemyId.ToLower() + ".json");
 
         if (File.Exists(path)) {
             string json = File.ReadAllText(path);
@@ -11,6 +13,7 @@ public static class EnemyLoader {
         }
 
         Debug.LogError("Enemy JSON not found: " + path);
+
         return null;
     }
 }
