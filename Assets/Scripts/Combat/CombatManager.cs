@@ -64,6 +64,7 @@ public class CombatManager : MonoBehaviour {
     void Start() {
         currEnemy = EnemyLoader.LoadEnemy("dummy");
 
+        // Load sprite
         if (currEnemy != null) {
             currEnemyHP = currEnemy.health;
             Sprite sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
@@ -88,14 +89,13 @@ public class CombatManager : MonoBehaviour {
         this.items = ItemLoader.GetAllItems();
         Debug.Log($"Loaded items: {this.items?.items?.Count ?? -1}");
 
-        // Populate displayableItems with all items (even if player has 0)
+        // Populate displayableItems with all items
         displayableItems.Clear();
         if (items != null && items.items != null) {
             foreach (var item in items.items) {
                 displayableItems.Add(item);
             }
         }
-
 
         // Load button sprites
         string[] spriteNames = { "Solve", "Help", "Item", "Skip" };
@@ -206,8 +206,7 @@ public class CombatManager : MonoBehaviour {
                     itemOptions[i].text = $"{item.itemName} x{amount}";
                     itemOptions[i].color = (i == itemIndex) ? selectedColor : defaultColor;
                 }
-            }
-            else {
+            } else {
                 if (itemOptions[i] != null)
                     itemOptions[i].gameObject.SetActive(false); // Deactivate the GameObject
             }
@@ -451,7 +450,7 @@ public class CombatManager : MonoBehaviour {
 
         if (GameManager.GetInstance().GetItemAmount(selectedItem.itemName) <= 0) {
             return;
-        } 
+        }
 
         // Example: Remove one from inventory
         GameManager.GetInstance().RemoveItem(selectedItem.itemName, 1);
@@ -517,7 +516,9 @@ public class CombatManager : MonoBehaviour {
         if (starText != null)
             starText.SetActive(false);
 
-        // Defensive null checks
+
+        /*
+        Old null checks..
         if (items == null || items.items == null || itemOptions == null || GameManager.GetInstance() == null) {
             if (itemOptions != null) {
                 foreach (var option in itemOptions)
@@ -525,6 +526,7 @@ public class CombatManager : MonoBehaviour {
             }
             return;
         }
+        */
 
         UpdateItemOptions();
     }
