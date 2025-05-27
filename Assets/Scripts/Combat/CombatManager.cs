@@ -18,14 +18,17 @@ public class CombatManager : MonoBehaviour {
     public GameObject textbox;
     public GameObject questionBox;
     public GameObject questionPanel;
+    public GameObject itemPanel;
     public GameObject starText;
 
     public List<GameObject> buttons;
     public List<GameObject> questionButtons;
+    public List<TextMeshProUGUI> itemOptions;
 
     public int playerLives = 3;
 
     private int buttonIndex = 0;
+    private int itemIndex = 0;
     private int questionButtonIndex = 0;
 
     private EnemyData currEnemy;
@@ -45,9 +48,14 @@ public class CombatManager : MonoBehaviour {
     private List<Sprite> questionSelectedSprites;
     private List<Sprite> questionUnselectedSprites;
 
-    private float typewriterSpeed = 0.08f;
+    private ItemList items;
+    private List<ItemData> displayableItems = new List<ItemData>();
+    private Color defaultColor = Color.white;
+    private Color selectedColor = Color.blue;
 
-    private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, End }
+    private readonly float typewriterSpeed = 0.08f;
+
+    private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, ShowItems, End }
     private CombatState state = CombatState.Dialogue;
 
     private QuestionData currentQuestion;
@@ -75,6 +83,19 @@ public class CombatManager : MonoBehaviour {
         // Hide the question panel by default
         if (questionPanel != null)
             questionPanel.SetActive(false);
+
+        // Load items
+        this.items = ItemLoader.GetAllItems();
+        Debug.Log($"Loaded items: {this.items?.items?.Count ?? -1}");
+
+        // Populate displayableItems with all items (even if player has 0)
+        displayableItems.Clear();
+        if (items != null && items.items != null) {
+            foreach (var item in items.items) {
+                displayableItems.Add(item);
+            }
+        }
+
 
         // Load button sprites
         string[] spriteNames = { "Solve", "Help", "Item", "Skip" };
@@ -135,6 +156,10 @@ public class CombatManager : MonoBehaviour {
             case CombatState.ShowTip:
                 HandleDialogueInput();
                 break;
+
+            case CombatState.ShowItems:
+                HandleItemPanelInput();
+                break;
         }
 
         UpdateStar();
@@ -164,6 +189,31 @@ public class CombatManager : MonoBehaviour {
         }
     }
 
+    void UpdateItemOptions() {
+        int optionCount = itemOptions != null ? itemOptions.Count : 0;
+        int displayCount = displayableItems != null ? displayableItems.Count : 0;
+
+        for (int i = 0; i < optionCount; ++i) {
+            if (i < displayCount) {
+                var item = displayableItems[i];
+                int amount = 0;
+
+                if (GameManager.GetInstance() != null)
+                    amount = GameManager.GetInstance().GetItemAmount(item.itemName);
+
+                if (itemOptions[i] != null) {
+                    itemOptions[i].gameObject.SetActive(true); // Activate the GameObject that holds the TextMeshProUGUI
+                    itemOptions[i].text = $"{item.itemName} x{amount}";
+                    itemOptions[i].color = (i == itemIndex) ? selectedColor : defaultColor;
+                }
+            }
+            else {
+                if (itemOptions[i] != null)
+                    itemOptions[i].gameObject.SetActive(false); // Deactivate the GameObject
+            }
+        }
+    }
+
     // HANDLE METHODS
     void HandlePlayerChoiceInput() {
         if (!isButtonEnabled) return;
@@ -187,13 +237,13 @@ public class CombatManager : MonoBehaviour {
                     ShowTip();
                     break;
                 case 2: // Item
+                    ShowItems();
                     break;
                 case 3: // Skip
                     break;
             }
         }
     }
-
 
     void HandleQuestionInput() {
         if (!isQuestionEnabled) return;
@@ -239,7 +289,6 @@ public class CombatManager : MonoBehaviour {
                 }
             }
 
-
             if (questionPanel != null)
                 questionPanel.SetActive(false);
 
@@ -260,6 +309,38 @@ public class CombatManager : MonoBehaviour {
             }
         }
     }
+
+    void HandleItemPanelInput() {
+        if (displayableItems.Count == 0) {
+            // Debug.Log("No items.");
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Escape)) {
+                if (itemPanel != null)
+                    itemPanel.SetActive(false);
+                state = CombatState.PlayerChoice;
+                EnablePlayerChoice();
+            }
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) {
+            if (itemIndex < displayableItems.Count - 1) itemIndex++;
+            UpdateItemOptions();
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+            if (itemIndex > 0) itemIndex--;
+            UpdateItemOptions();
+        }
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            UseSelectedItem();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (itemPanel != null)
+                itemPanel.SetActive(false);
+            state = CombatState.PlayerChoice;
+            EnablePlayerChoice();
+        }
+    }
+
 
     // COROUTINES
     private IEnumerator ShowDialogue() {
@@ -364,6 +445,27 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(ShowDialogue());
     }
 
+    void UseSelectedItem() {
+        if (displayableItems.Count == 0) return;
+        var selectedItem = displayableItems[itemIndex];
+
+        if (GameManager.GetInstance().GetItemAmount(selectedItem.itemName) <= 0) {
+            return;
+        } 
+
+        // Example: Remove one from inventory
+        GameManager.GetInstance().RemoveItem(selectedItem.itemName, 1);
+
+        // TODO: Apply item effect here (e.g., heal, buff, etc.)
+        // For now, just show a message
+        // StartCoroutine(ShowItemUsedCoroutine(selectedItem.itemName));
+
+        // Hide item panel
+        if (itemPanel != null)
+            itemPanel.SetActive(false);
+    }
+
+
     void EnablePlayerChoice() {
         isButtonEnabled = true;
         buttonIndex = 0;
@@ -399,6 +501,33 @@ public class CombatManager : MonoBehaviour {
         StartCoroutine(ShowTipCoroutine(tip));
     }
 
+    void ShowItems() {
+        isButtonEnabled = false;
+        state = CombatState.ShowItems;
+        itemIndex = 0;
+
+        if (itemPanel != null)
+            itemPanel.SetActive(true);
+        if (textbox != null)
+            textbox.SetActive(false);
+        if (questionBox != null)
+            questionBox.SetActive(false);
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+        if (starText != null)
+            starText.SetActive(false);
+
+        // Defensive null checks
+        if (items == null || items.items == null || itemOptions == null || GameManager.GetInstance() == null) {
+            if (itemOptions != null) {
+                foreach (var option in itemOptions)
+                    option.gameObject.SetActive(false);
+            }
+            return;
+        }
+
+        UpdateItemOptions();
+    }
 
     void EndCombat() {
         state = CombatState.End;
