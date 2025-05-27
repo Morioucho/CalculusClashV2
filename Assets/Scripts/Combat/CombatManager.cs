@@ -50,8 +50,9 @@ public class CombatManager : MonoBehaviour {
 
     private ItemList items;
     private List<ItemData> displayableItems = new List<ItemData>();
-    private Color defaultColor = Color.white;
-    private Color selectedColor = Color.blue;
+
+    private readonly Color defaultColor = Color.white;
+    private readonly Color selectedColor = new Color((123f / 255f), (163f / 255f), (217f / 255f));
 
     private readonly float typewriterSpeed = 0.08f;
 
