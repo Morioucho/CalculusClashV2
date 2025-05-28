@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,11 +38,11 @@ public class PlayerController : MonoBehaviour
                 if (!success)
                 {
                     success = TryMove(new Vector2(movementInput.x, 0));
-                }
 
-                if (!success)
-                {
-                    success = TryMove(new Vector2(0, movementInput.y));
+                    if (!success)
+                    {
+                        success = TryMove(new Vector2(0, movementInput.y));
+                    }
                 }
             }
         }
@@ -81,11 +82,11 @@ public class PlayerController : MonoBehaviour
 
     void Animate()
     {
-        // Set movement direction
-        if (movementInput != Vector2.zero)
-        {
-            animator.SetFloat("AnimMoveX", movementInput.x);
-            animator.SetFloat("AnimMoveY", movementInput.y);
-        }
+        // Set direction parameters (even if zero, to retain last direction)
+        animator.SetFloat("AnimMoveX", movementInput.x);
+        animator.SetFloat("AnimMoveY", movementInput.y);
+
+        animator.SetFloat("AnimMoveMagnitude", movementInput.magnitude);
     }
+
 }
