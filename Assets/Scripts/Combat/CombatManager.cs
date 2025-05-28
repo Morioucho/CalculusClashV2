@@ -37,6 +37,8 @@ public class CombatManager : MonoBehaviour {
     private EnemyData currEnemy;
 
     private AudioSource musicSource;
+    private AudioSource sfxSource;
+    private AudioSource buttonSource;
 
     private int currEnemyHp;
 
@@ -141,6 +143,16 @@ public class CombatManager : MonoBehaviour {
             musicSource.Play();
         }
 
+        // Load the SFX player.
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource.loop = false;
+        sfxSource.playOnAwake = false;
+
+        // Load the button player.
+        buttonSource = gameObject.AddComponent<AudioSource>();
+        buttonSource.loop = false;
+        buttonSource.playOnAwake = false;
+
         // Start the dialogue.
         NextDialogue();
     }
@@ -232,6 +244,12 @@ public class CombatManager : MonoBehaviour {
         UpdateButtonSprites();
 
         if (!Input.GetKeyDown(KeyCode.Return)) return;
+
+        var selectClip = Resources.Load<AudioClip>("Audio/Combat/select");
+        if (selectClip != null && sfxSource != null) {
+            buttonSource.clip = selectClip;
+            buttonSource.Play();
+        }
 
         switch (buttonIndex) {
             case 0: // Solve
@@ -424,7 +442,18 @@ public class CombatManager : MonoBehaviour {
         if (damageText == null || enemyImage == null)
             yield break;
 
+        // Load and play hit sound
+        var hitClip = Resources.Load<AudioClip>("Audio/Combat/hit");
+        if (hitClip != null && sfxSource != null) {
+            sfxSource.clip = hitClip;
+            sfxSource.Play();
+        }
+
         isButtonEnabled = false;
+
+        float waitTime = 0.75f;
+        while (sfxSource != null && sfxSource.isPlaying && sfxSource.time < waitTime)
+            yield return null;
 
         damageText.text = $"-{damageAmount}";
         damageText.gameObject.SetActive(true);
@@ -436,7 +465,7 @@ public class CombatManager : MonoBehaviour {
         Vector2 enemyOriginalPos = enemyRect.anchoredPosition;
 
         float bounceDuration = 0.4f;
-        float totalDuration = 1.5f;
+        float totalDuration = 1.0f;
         float jumpHeight = 40f;
         float shakeAmount = 20f;
         int shakeCount = 3;
@@ -465,6 +494,7 @@ public class CombatManager : MonoBehaviour {
 
         isButtonEnabled = true;
     }
+
 
     // MISC
     private void StartQuestion() {
