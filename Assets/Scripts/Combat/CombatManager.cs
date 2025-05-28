@@ -6,6 +6,7 @@ using TMPro;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 public class CombatManager : MonoBehaviour {
     [SerializeField]
@@ -30,26 +31,28 @@ public class CombatManager : MonoBehaviour {
     private int buttonIndex = 0;
     private int itemIndex = 0;
     private int questionButtonIndex = 0;
+    private int dialogueIndex = 0;
 
     private EnemyData currEnemy;
+
     private AudioSource musicSource;
 
-    private int currEnemyHP;
-    private int dialogueIndex = 0;
+    private int currEnemyHp;
 
     private bool isButtonEnabled = false;
     private bool isQuestionEnabled = false;
+
     private bool skipTypewriter = false;
     private bool waitingForEnter = false;
 
-    private List<Sprite> selectedSprites;
-    private List<Sprite> unselectedSprites;
+    private List<Sprite> menuSelectedSprites;
+    private List<Sprite> menuUnselectedSprites;
 
     private List<Sprite> questionSelectedSprites;
     private List<Sprite> questionUnselectedSprites;
 
     private ItemList items;
-    private List<ItemData> displayableItems = new List<ItemData>();
+    private readonly List<ItemData> displayableItems = new List<ItemData>();
 
     private readonly Color defaultColor = Color.white;
     private readonly Color selectedColor = new Color((123f / 255f), (163f / 255f), (217f / 255f));
@@ -62,22 +65,23 @@ public class CombatManager : MonoBehaviour {
     private QuestionData currentQuestion;
     private int correctAnswerIndex;
 
-    void Start() {
+    public void Start() {
+        // Todo: Implement proper enemy loading via GameManager.
         currEnemy = EnemyLoader.LoadEnemy("dummy");
 
-        // Load sprite
         if (currEnemy != null) {
-            currEnemyHP = currEnemy.health;
-            Sprite sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
-            enemyImage.sprite = sprite;
+            currEnemyHp = currEnemy.health;
 
+            var sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
+
+            enemyImage.sprite = sprite;
             enemyImage.preserveAspect = true;
 
-            RectTransform imageRect = enemyImage.rectTransform;
-            float targetHeight = imageRect.rect.height;
+            var imageRect = enemyImage.rectTransform;
+            var targetHeight = imageRect.rect.height;
 
-            if (sprite != null && imageRect != null) {
-                float aspect = sprite.rect.width / sprite.rect.height;
+            if (sprite != null) {
+                var aspect = sprite.rect.width / sprite.rect.height;
                 imageRect.sizeDelta = new Vector2(targetHeight * aspect, targetHeight);
             }
         }
@@ -100,15 +104,15 @@ public class CombatManager : MonoBehaviour {
 
         // Load button sprites
         string[] spriteNames = { "Solve", "Help", "Item", "Skip" };
-        selectedSprites = new List<Sprite>();
-        unselectedSprites = new List<Sprite>();
+        menuSelectedSprites = new List<Sprite>();
+        menuUnselectedSprites = new List<Sprite>();
 
-        for (int i = 0; i < spriteNames.Length; ++i) {
-            Sprite selected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i] + "Selected");
-            Sprite unselected = Resources.Load<Sprite>("UI/Combat/" + spriteNames[i]);
+        foreach (var spriteName in spriteNames) {
+            var selected = Resources.Load<Sprite>("UI/Combat/" + spriteName + "Selected");
+            var unselected = Resources.Load<Sprite>("UI/Combat/" + spriteName);
 
-            selectedSprites.Add(selected);
-            unselectedSprites.Add(unselected);
+            menuSelectedSprites.Add(selected);
+            menuUnselectedSprites.Add(unselected);
         }
 
         // Load question sprites
@@ -116,20 +120,20 @@ public class CombatManager : MonoBehaviour {
         questionSelectedSprites = new List<Sprite>();
         questionUnselectedSprites = new List<Sprite>();
 
-        for (int i = 0; i < questionSpriteNames.Length; ++i) {
-            Sprite selected = Resources.Load<Sprite>("UI/Combat/" + questionSpriteNames[i] + "Selected");
-            Sprite unselected = Resources.Load<Sprite>("UI/Combat/" + questionSpriteNames[i]);
+        foreach (var spriteName in questionSpriteNames) {
+            var selected = Resources.Load<Sprite>("UI/Combat/" + spriteName + "Selected");
+            var unselected = Resources.Load<Sprite>("UI/Combat/" + spriteName);
 
             questionSelectedSprites.Add(selected);
             questionUnselectedSprites.Add(unselected);
         }
 
-        // Load the audio.
+        // Load the boss music.
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
         musicSource.volume = currEnemy.musicVolume;
 
-        AudioClip bossTheme = Resources.Load<AudioClip>("Audio/EnemyMusic/" + currEnemy.id);
+        var bossTheme = Resources.Load<AudioClip>("Audio/EnemyMusic/" + currEnemy.id);
 
         if (bossTheme != null) {
             musicSource.clip = bossTheme;
@@ -140,7 +144,7 @@ public class CombatManager : MonoBehaviour {
         NextDialogue();
     }
 
-    void Update() {
+    public void Update() {
         switch (state) {
             case CombatState.Dialogue:
                 HandleDialogueInput();
@@ -168,29 +172,27 @@ public class CombatManager : MonoBehaviour {
 
 
     // UPDATE METHODS
-    void UpdateQuestionButtonSprites() {
+    private void UpdateQuestionButtonSprites() {
         for (int i = 0; i < questionButtons.Count; ++i) {
-            Image img = questionButtons[i].GetComponent<Image>();
+            var img = questionButtons[i].GetComponent<Image>();
+
             img.sprite = (i == questionButtonIndex) ? questionSelectedSprites[i] : questionUnselectedSprites[i];
         }
     }
 
-    void UpdateStar() {
-        if (this.dialogueText.text == null || this.dialogueText.text == "") {
-            starText.SetActive(false);
-        } else {
-            starText.SetActive(true);
-        }
+    private void UpdateStar() {
+        starText.SetActive(!string.IsNullOrEmpty(dialogueText.text) ? true : false);
     }
 
-    void UpdateButtonSprites() {
+    private void UpdateButtonSprites() {
         for (int i = 0; i < buttons.Count; ++i) {
-            Image img = buttons[i].GetComponent<Image>();
-            img.sprite = (i == buttonIndex) ? selectedSprites[i] : unselectedSprites[i];
+            var img = buttons[i].GetComponent<Image>();
+
+            img.sprite = (i == buttonIndex) ? menuSelectedSprites[i] : menuUnselectedSprites[i];
         }
     }
 
-    void UpdateItemOptions() {
+    private void UpdateItemOptions() {
         int optionCount = itemOptions != null ? itemOptions.Count : 0;
         int displayCount = displayableItems != null ? displayableItems.Count : 0;
 
@@ -203,19 +205,19 @@ public class CombatManager : MonoBehaviour {
                     amount = GameManager.GetInstance().GetItemAmount(item.itemName);
 
                 if (itemOptions[i] != null) {
-                    itemOptions[i].gameObject.SetActive(true); // Activate the GameObject that holds the TextMeshProUGUI
+                    itemOptions[i].gameObject.SetActive(true);
                     itemOptions[i].text = $"{item.itemName} x{amount}";
                     itemOptions[i].color = (i == itemIndex) ? selectedColor : defaultColor;
                 }
             } else {
                 if (itemOptions[i] != null)
-                    itemOptions[i].gameObject.SetActive(false); // Deactivate the GameObject
+                    itemOptions[i].gameObject.SetActive(false);
             }
         }
     }
 
     // HANDLE METHODS
-    void HandlePlayerChoiceInput() {
+    private void HandlePlayerChoiceInput() {
         if (!isButtonEnabled) return;
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
@@ -228,97 +230,100 @@ public class CombatManager : MonoBehaviour {
 
         UpdateButtonSprites();
 
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            switch (buttonIndex) {
-                case 0: // Solve
-                    StartQuestion();
-                    break;
-                case 1: // Help
-                    ShowTip();
-                    break;
-                case 2: // Item
-                    ShowItems();
-                    break;
-                case 3: // Skip
-                    break;
-            }
+        if (!Input.GetKeyDown(KeyCode.Return)) return;
+
+        switch (buttonIndex) {
+            case 0: // Solve
+                StartQuestion();
+                break;
+            case 1: // Help
+                ShowTip();
+                break;
+            case 2: // Item
+                ShowItems();
+                break;
+            case 3: // Skip
+                break;
         }
     }
 
-    void HandleQuestionInput() {
+    private void HandleQuestionInput() {
         if (!isQuestionEnabled) return;
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
             if (questionButtonIndex < questionButtons.Count - 1) questionButtonIndex++;
         }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
             if (questionButtonIndex > 0) questionButtonIndex--;
         }
+
         UpdateQuestionButtonSprites();
 
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) {
-            isQuestionEnabled = false;
+        if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) return;
 
-            bool correct = (questionButtonIndex == correctAnswerIndex);
+        isQuestionEnabled = false;
 
-            if (correct) {
-                currEnemyHP -= 10;
-                if (currEnemyHP <= 0) {
-                    if (questionPanel != null)
-                        questionPanel.SetActive(false);
+        var correct = questionButtonIndex == correctAnswerIndex;
 
-                    if (enemyImage != null)
-                        enemyImage.gameObject.SetActive(true);
+        if (correct) {
+            currEnemyHp -= 10;
+            if (currEnemyHp <= 0) {
+                if (questionPanel != null)
+                    questionPanel.SetActive(false);
 
-                    EndCombat();
-                    return;
-                }
-            } else {
-                playerLives -= 1;
-                playerLivesText.text = playerLives.ToString();
+                if (enemyImage != null)
+                    enemyImage.gameObject.SetActive(true);
 
-                if (playerLives <= 0) {
-                    if (questionPanel != null)
-                        questionPanel.SetActive(false);
-
-                    if (enemyImage != null)
-                        enemyImage.gameObject.SetActive(true);
-
-                    GameOver();
-                    return;
-                }
+                EndCombat();
+                return;
             }
+        }
+        else {
+            playerLives -= 1;
+            playerLivesText.text = playerLives.ToString();
 
-            if (questionPanel != null)
-                questionPanel.SetActive(false);
+            if (playerLives <= 0) {
+                if (questionPanel != null)
+                    questionPanel.SetActive(false);
 
-            if (enemyImage != null)
-                enemyImage.gameObject.SetActive(true);
+                if (enemyImage != null)
+                    enemyImage.gameObject.SetActive(true);
+
+                GameOver();
+                return;
+            }
+        }
+
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
+
+        state = CombatState.PlayerChoice;
+        EnablePlayerChoice();
+    }
+
+    private void HandleDialogueInput() {
+        if (!Input.GetKeyDown(KeyCode.Return)) return;
+
+        if (waitingForEnter)
+            waitingForEnter = false;
+        else
+            skipTypewriter = true;
+    }
+
+    private void HandleItemPanelInput() {
+        if (displayableItems.Count == 0) {
+            if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Escape)) return;
+
+            if (itemPanel != null)
+                itemPanel.SetActive(false);
 
             state = CombatState.PlayerChoice;
             EnablePlayerChoice();
-        }
-    }
 
-    void HandleDialogueInput() {
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            if (waitingForEnter) {
-                waitingForEnter = false;
-            } else {
-                skipTypewriter = true;
-            }
-        }
-    }
-
-    void HandleItemPanelInput() {
-        if (displayableItems.Count == 0) {
-            // Debug.Log("No items.");
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Escape)) {
-                if (itemPanel != null)
-                    itemPanel.SetActive(false);
-                state = CombatState.PlayerChoice;
-                EnablePlayerChoice();
-            }
             return;
         }
 
@@ -333,12 +338,14 @@ public class CombatManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Return)) {
             UseSelectedItem();
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (itemPanel != null)
-                itemPanel.SetActive(false);
-            state = CombatState.PlayerChoice;
-            EnablePlayerChoice();
-        }
+
+        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+
+        if (itemPanel != null)
+            itemPanel.SetActive(false);
+
+        state = CombatState.PlayerChoice;
+        EnablePlayerChoice();
     }
 
 
@@ -405,13 +412,12 @@ public class CombatManager : MonoBehaviour {
 
 
     // MISC
-    void StartQuestion() {
+    private void StartQuestion() {
         isButtonEnabled = false;
         isQuestionEnabled = true;
         state = CombatState.Question;
-
-        Sprite questionSprite;
-        currentQuestion = QuestionLoader.GetRandomQuestion(currEnemy.unit, out questionSprite);
+        
+        currentQuestion = QuestionLoader.GetRandomQuestion(currEnemy.unit, out var questionSprite);
         correctAnswerIndex = currentQuestion.correct;
 
         textbox.SetActive(false);
@@ -419,9 +425,10 @@ public class CombatManager : MonoBehaviour {
         questionImage.sprite = questionSprite;
 
         questionImage.preserveAspect = true;
+
         if (questionPanel != null && questionImage != null) {
-            RectTransform panelRect = questionPanel.GetComponent<RectTransform>();
-            RectTransform imageRect = questionImage.rectTransform;
+            var panelRect = questionPanel.GetComponent<RectTransform>();
+            var imageRect = questionImage.rectTransform;
 
             if (panelRect != null && imageRect != null) {
                 imageRect.sizeDelta = panelRect.rect.size;
@@ -438,14 +445,14 @@ public class CombatManager : MonoBehaviour {
         UpdateQuestionButtonSprites();
     }
 
-    public void NextDialogue() {
+    private void NextDialogue() {
         dialogueIndex = 0;
         state = CombatState.Dialogue;
 
         StartCoroutine(ShowDialogue());
     }
 
-    void UseSelectedItem() {
+    private void UseSelectedItem() {
         if (displayableItems.Count == 0) return;
         var selectedItem = displayableItems[itemIndex];
 
@@ -466,7 +473,7 @@ public class CombatManager : MonoBehaviour {
     }
 
 
-    void EnablePlayerChoice() {
+    private void EnablePlayerChoice() {
         isButtonEnabled = true;
         buttonIndex = 0;
 
@@ -481,7 +488,7 @@ public class CombatManager : MonoBehaviour {
             enemyImage.gameObject.SetActive(true);
     }
 
-    void EnemyAttack() {
+    private void EnemyAttack() {
         playerLives -= 1;
         playerLivesText.text = "Lives: " + playerLives;
 
@@ -494,14 +501,14 @@ public class CombatManager : MonoBehaviour {
         EnablePlayerChoice();
     }
 
-    void ShowTip() {
+    private void ShowTip() {
         isButtonEnabled = false;
         state = CombatState.ShowTip;
         string tip = TipLoader.GetRandomTip(currEnemy.unit);
         StartCoroutine(ShowTipCoroutine(tip));
     }
 
-    void ShowItems() {
+    private void ShowItems() {
         isButtonEnabled = false;
         state = CombatState.ShowItems;
         itemIndex = 0;
@@ -532,14 +539,14 @@ public class CombatManager : MonoBehaviour {
         UpdateItemOptions();
     }
 
-    void EndCombat() {
+    private void EndCombat() {
         state = CombatState.End;
 
         Debug.Log("Enemy Defeated");
         SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
 
-    void GameOver() {
+    private void GameOver() {
         state = CombatState.End;
 
         Debug.Log("Player Defeated");
