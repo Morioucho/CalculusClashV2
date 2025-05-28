@@ -7,7 +7,6 @@
 # Features
 - Questions from all 10 units of AP Calculus BC
 - Different Calculus-themed bosses
-- Different playable characters
 - A story behind the game
 - Multi-platform support (Windows, MacOS, and Linux)
 - Controller support
@@ -37,4 +36,4 @@ If you wish to build this project, you must ensure that you have **Unity 6.1** o
 The Unity Editor is available on both MacOS and Windows, and any computer should be able to run it. The game is also lightweight, so there isn't much concern about hardware requirements.
 
 # Credits
-Programmed by Saumil Sharma, UI & Animation by Christian Hsu, Math by Kason Lai & Om Kasar.
+Programmed by Saumil Sharma, Levels designed by Om Kasar, Animation and Pixel Art by Christian Hsu, Math by Kason Lai.
