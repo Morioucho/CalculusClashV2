@@ -38,7 +38,7 @@ public class InitialDialogue : MonoBehaviour {
             yield return StartCoroutine(FadeOut());
         }
 
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Room1");
     }
 
     public IEnumerator LoadDialogues() {
