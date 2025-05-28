@@ -1,4 +1,4 @@
 [
-  { "spriteIndex": 0, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
+  { "spriteIndex": 0, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
   { "spriteIndex": 1, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 }
 ]

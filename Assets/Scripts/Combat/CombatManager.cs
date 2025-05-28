@@ -15,6 +15,7 @@ public class CombatManager : MonoBehaviour {
 
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI playerLivesText;
+    public TextMeshProUGUI damageText;
 
     public GameObject textbox;
     public GameObject questionBox;
@@ -267,19 +268,11 @@ public class CombatManager : MonoBehaviour {
         var correct = questionButtonIndex == correctAnswerIndex;
 
         if (correct) {
+            var damage = 10;
+
+            StartCoroutine(HandleDamageAndContinue(damage));
             currEnemyHp -= 10;
-            if (currEnemyHp <= 0) {
-                if (questionPanel != null)
-                    questionPanel.SetActive(false);
-
-                if (enemyImage != null)
-                    enemyImage.gameObject.SetActive(true);
-
-                EndCombat();
-                return;
-            }
-        }
-        else {
+        } else {
             playerLives -= 1;
             playerLivesText.text = playerLives.ToString();
 
@@ -348,6 +341,24 @@ public class CombatManager : MonoBehaviour {
         EnablePlayerChoice();
     }
 
+    private IEnumerator HandleDamageAndContinue(int damage) {
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
+
+        yield return StartCoroutine(ShowDamageText(damage));
+
+        if (currEnemyHp <= 0) {
+            EndCombat();
+            yield break;
+        }
+
+        state = CombatState.PlayerChoice;
+        EnablePlayerChoice();
+    }
+
 
     // COROUTINES
     private IEnumerator ShowDialogue() {
@@ -409,7 +420,51 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
     }
+    private IEnumerator ShowDamageText(int damageAmount) {
+        if (damageText == null || enemyImage == null)
+            yield break;
 
+        isButtonEnabled = false;
+
+        damageText.text = $"-{damageAmount}";
+        damageText.gameObject.SetActive(true);
+
+        RectTransform damageRect = damageText.rectTransform;
+        Vector2 damageOriginalPos = damageRect.anchoredPosition;
+
+        RectTransform enemyRect = enemyImage.rectTransform;
+        Vector2 enemyOriginalPos = enemyRect.anchoredPosition;
+
+        float bounceDuration = 0.4f;
+        float totalDuration = 1.5f;
+        float jumpHeight = 40f;
+        float shakeAmount = 20f;
+        int shakeCount = 3;
+
+        float elapsed = 0f;
+
+        while (elapsed < bounceDuration) {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / bounceDuration);
+
+            float yOffset = Mathf.Sin(t * Mathf.PI) * jumpHeight;
+            damageRect.anchoredPosition = damageOriginalPos + Vector2.up * yOffset;
+
+            float xOffset = Mathf.Sin(t * Mathf.PI * shakeCount) * shakeAmount;
+            enemyRect.anchoredPosition = enemyOriginalPos + Vector2.right * xOffset;
+
+            yield return null;
+        }
+
+        damageRect.anchoredPosition = damageOriginalPos;
+        enemyRect.anchoredPosition = enemyOriginalPos;
+
+        yield return new WaitForSeconds(totalDuration - bounceDuration);
+
+        damageText.gameObject.SetActive(false);
+
+        isButtonEnabled = true;
+    }
 
     // MISC
     private void StartQuestion() {
