@@ -1,18 +1,16 @@
 using UnityEngine;
 
-using System.IO;
 using System.Collections.Generic;
 
 public static class TipLoader {
     public static string GetRandomTip(int unit) {
-        string folder = Path.Combine(Application.streamingAssetsPath, "Questions", unit.ToString());
-        string path = Path.Combine(folder, "tips.json");
+        string resourcePath = $"Questions/{unit}/tips";
+        TextAsset jsonAsset = Resources.Load<TextAsset>(resourcePath);
 
-        if (!File.Exists(path))
+        if (jsonAsset == null)
             return "";
 
-        string json = File.ReadAllText(path);
-        TipList tipList = JsonUtility.FromJson<TipList>(json);
+        TipList tipList = JsonUtility.FromJson<TipList>(jsonAsset.text);
 
         if (tipList == null || tipList.tips == null || tipList.tips.Count == 0)
             return "";

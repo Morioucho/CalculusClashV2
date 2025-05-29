@@ -7,15 +7,15 @@ public static class QuestionLoader {
     public static QuestionData GetRandomQuestion(int unit, out Sprite sprite) {
         sprite = null;
 
-        string folder = Path.Combine(Application.streamingAssetsPath, "Questions", unit.ToString());
-        string path = Path.Combine(folder, "questions.json");
+        string resourcePath = $"Questions/{unit}/questions";
+        TextAsset jsonAsset = Resources.Load<TextAsset>(resourcePath);
 
-        if (!File.Exists(path)) {
-            Debug.LogError("Question JSON not found: " + path);
+        if (jsonAsset == null) {
+            Debug.LogError("Question JSON not found: " + resourcePath);
             return null;
         }
 
-        string rawJson = File.ReadAllText(path);
+        string rawJson = jsonAsset.text;
         string wrappedJson = "{\"questions\":" + rawJson + "}";
         QuestionDataList dataList = JsonUtility.FromJson<QuestionDataList>(wrappedJson);
 

@@ -1,25 +1,23 @@
 using UnityEngine;
 
-using System.IO;
 using System.Collections.Generic;
 
 public static class ItemLoader {
-
     public static ItemList GetAllItems() {
-        string folder = Path.Combine(Application.streamingAssetsPath, "Items");
-        string path = Path.Combine(folder, "items.json");
+        string resourcePath = "Items/items";
+        TextAsset jsonAsset = Resources.Load<TextAsset>(resourcePath);
 
-        if (!File.Exists(path)) {
-            Debug.LogError("Item JSON not found: " + path);
+        if (jsonAsset == null) {
+            Debug.LogError("Item JSON not found in Resources at: " + resourcePath);
             return null;
         }
 
-        string rawJson = File.ReadAllText(path);
+        string rawJson = jsonAsset.text;
         string wrappedJson = "{\"items\":" + rawJson + "}";
 
         ItemList items = JsonUtility.FromJson<ItemList>(wrappedJson);
 
-        if (items.items.Count == 0) {
+        if (items.items == null || items.items.Count == 0) {
             Debug.LogWarning("No items found in list.");
             return null;
         }

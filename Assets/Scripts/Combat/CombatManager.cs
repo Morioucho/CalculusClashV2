@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor.Rendering;
 
 public class CombatManager : MonoBehaviour {
     [SerializeField]
@@ -480,6 +481,13 @@ public class CombatManager : MonoBehaviour {
     private IEnumerator ShowDamageText(int damageAmount) {
         if (damageText == null || enemyImage == null)
             yield break;
+
+        if (currEnemy.banter != null && currEnemy.banter.Length > 0) {
+            int randomIndex = Random.Range(0, currEnemy.banter.Length);
+            this.dialogueText.text = currEnemy.banter[randomIndex];
+        } else {
+            this.dialogueText.text = "";
+        }
 
         // Load and play hit sound
         var hitClip = Resources.Load<AudioClip>("Audio/Combat/hit");
