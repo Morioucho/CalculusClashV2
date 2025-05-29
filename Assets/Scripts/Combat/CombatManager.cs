@@ -48,6 +48,8 @@ public class CombatManager : MonoBehaviour {
     private bool skipTypewriter = false;
     private bool waitingForEnter = false;
 
+    private Dictionary<string, bool> actionLocks = new Dictionary<string, bool>();
+
     private List<Sprite> menuSelectedSprites;
     private List<Sprite> menuUnselectedSprites;
 
@@ -88,6 +90,12 @@ public class CombatManager : MonoBehaviour {
                 imageRect.sizeDelta = new Vector2(targetHeight * aspect, targetHeight);
             }
         }
+
+        // Load locks:
+        actionLocks["main"] = true;
+        actionLocks["menu"] = true;
+        actionLocks["question"] = true;
+        actionLocks["item"] = true;
 
         // Hide the question panel by default
         if (questionPanel != null)
@@ -180,6 +188,7 @@ public class CombatManager : MonoBehaviour {
                 break;
         }
 
+        DebugLocks();
         UpdateStar();
     }
 
@@ -231,6 +240,13 @@ public class CombatManager : MonoBehaviour {
 
     // HANDLE METHODS
     private void HandlePlayerChoiceInput() {
+        if (IsActionUnlocked("main")) {
+            RegisterLock("main");
+        }
+        else {
+            return;
+        }
+
         if (!isButtonEnabled) return;
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
@@ -244,6 +260,8 @@ public class CombatManager : MonoBehaviour {
         UpdateButtonSprites();
 
         if (!Input.GetKeyDown(KeyCode.Return)) return;
+
+        RegisterUnlock("main");
 
         var selectClip = Resources.Load<AudioClip>("Audio/Combat/select");
         if (selectClip != null && sfxSource != null) {
@@ -267,6 +285,12 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void HandleQuestionInput() {
+        if (IsActionUnlocked("question")) {
+            RegisterLock("question");
+        } else {
+            return;
+        }
+
         if (!isQuestionEnabled) return;
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
@@ -280,7 +304,7 @@ public class CombatManager : MonoBehaviour {
         UpdateQuestionButtonSprites();
 
         if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) return;
-
+        
         isQuestionEnabled = false;
 
         var correct = questionButtonIndex == correctAnswerIndex;
@@ -304,6 +328,8 @@ public class CombatManager : MonoBehaviour {
                 GameOver();
                 return;
             }
+
+            RegisterUnlock("question");
         }
 
         if (questionPanel != null)
@@ -326,6 +352,12 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void HandleItemPanelInput() {
+        if (IsActionUnlocked("item")) {
+            RegisterLock("item");
+        } else {
+            return;
+        }
+
         if (displayableItems.Count == 0) {
             if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Escape)) return;
 
@@ -350,10 +382,15 @@ public class CombatManager : MonoBehaviour {
             UseSelectedItem();
         }
 
-        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        if (!Input.GetKeyDown(KeyCode.Escape)) {
+            RegisterUnlock("item");
+            return;
+        }
 
         if (itemPanel != null)
             itemPanel.SetActive(false);
+
+        RegisterUnlock("item");
 
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
@@ -372,6 +409,8 @@ public class CombatManager : MonoBehaviour {
             EndCombat();
             yield break;
         }
+
+        RegisterUnlock("question");
 
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
@@ -588,8 +627,10 @@ public class CombatManager : MonoBehaviour {
 
     private void ShowTip() {
         isButtonEnabled = false;
+
         state = CombatState.ShowTip;
         string tip = TipLoader.GetRandomTip(currEnemy.unit);
+
         StartCoroutine(ShowTipCoroutine(tip));
     }
 
@@ -635,5 +676,27 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.End;
 
         Debug.Log("Player Defeated");
+    }
+
+    // Helper Methods
+    private bool IsActionUnlocked(string action) {
+        return actionLocks.TryGetValue(action, out bool unlocked) && unlocked;
+    }
+
+    private void RegisterLock(string action) {
+        foreach (var key in new List<string>(actionLocks.Keys))
+            actionLocks[key] = false;
+
+        actionLocks[action] = true;
+    }
+
+    private void RegisterUnlock(string action) {
+        foreach (var key in new List<string>(actionLocks.Keys))
+            actionLocks[key] = true;
+    }
+
+    private void DebugLocks() {
+        foreach (var key in new List<string>(actionLocks.Keys))
+            Debug.Log(key + " -> " + actionLocks[key]);
     }
 }
