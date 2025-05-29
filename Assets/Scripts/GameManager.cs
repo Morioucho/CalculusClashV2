@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public const string version = "1.1.0";
     public const bool developmentBuild = true;
     public const string buildDate = "05-28-2025";
+    public const int roomAmount = 10;
 
     public float timeOfDay = 0.0f;
 
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour {
     public string previousScene;
 
     public Dictionary<string, int> playerItems = new Dictionary<string, int>();
+    public Dictionary<string, Position> roomPositions = new Dictionary<string, Position>();
 
     void Awake() {
         if (instance == null) {
@@ -34,6 +37,10 @@ public class GameManager : MonoBehaviour {
                             playerItems[item.itemName] = 5;
                         }
                     }
+                }
+
+                for (int i = 0; i < roomAmount + 1; ++i) {
+                    roomPositions["room" + i] = new Position(0, 0);
                 }
             }
         } else {

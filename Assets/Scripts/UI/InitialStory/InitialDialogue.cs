@@ -90,7 +90,7 @@ public class InitialDialogue : MonoBehaviour {
         float duration = 0.0f;
 
         foreach (char c in sentence) {
-            duration += (c == '.') ? 0.1f : 0.05f;
+            duration += (c == '.') ? 0.05f : 0.025f;
         }
 
         return duration;

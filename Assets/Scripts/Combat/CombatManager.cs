@@ -6,8 +6,6 @@ using TMPro;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEditor.Rendering;
 
 public class CombatManager : MonoBehaviour {
     [SerializeField]
@@ -73,7 +71,7 @@ public class CombatManager : MonoBehaviour {
 
     public void Start() {
         // Todo: Implement proper enemy loading via GameManager.
-        currEnemy = EnemyLoader.LoadEnemy("dummy");
+        currEnemy = EnemyLoader.LoadEnemy(GameManager.instance.encounterEnemyID);
 
         if (currEnemy != null) {
             currEnemyHp = currEnemy.health;

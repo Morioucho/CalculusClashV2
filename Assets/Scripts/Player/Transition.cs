@@ -17,7 +17,7 @@ public class TransitionManager : MonoBehaviour {
     public float yMax;
     public float yMin;
 
-    private const float fadeDuration = 0.6f;
+    private const float fadeDuration = 0.3f;
 
     public void Update() {
         if (player == null) return;

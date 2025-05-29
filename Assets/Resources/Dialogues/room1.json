@@ -1,0 +1,32 @@
+[
+    {
+        "text": "dialogue 1 or something like that",
+        "duration": 2,
+        "speaker": "pythagoras"
+    },
+    {
+        "text": "dialogue 2 or something like that",
+        "duration": 2,
+        "speaker": "chen"
+    },
+    {
+        "text": "dialogue 3 or something like that",
+        "duration": 2,
+        "speaker": "pythagoras"
+    },
+    {
+        "text": "dialogue 4 or something like that",
+        "duration": 2,
+        "speaker": "pythagoras"
+    },
+    {
+        "text": "dialogue 5 or something like that",
+        "duration": 2,
+        "speaker": "pythagoras"
+    },
+    {
+        "text": "dialogue 6 or something like that",
+        "duration": 2,
+        "speaker": "pythagoras"
+    }
+]
