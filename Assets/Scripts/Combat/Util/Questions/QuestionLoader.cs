@@ -27,7 +27,7 @@ public static class QuestionLoader {
         int randIndex = Random.Range(0, dataList.questions.Count);
         QuestionData question = dataList.questions[randIndex];
 
-        string spritePath = $"Questions/{unit}/{question.spriteIndex + 1}";
+        string spritePath = $"Questions/{unit}/{question.spriteIndex}";
         sprite = Resources.Load<Sprite>(spritePath);
 
         if (sprite == null) {
