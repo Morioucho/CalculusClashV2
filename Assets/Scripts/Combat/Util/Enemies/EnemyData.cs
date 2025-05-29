@@ -7,6 +7,7 @@ public class EnemyData {
     public int unit;
     public int health;
     public DialogueLine[] dialogue;
+    public string[] banter;
     public string sprite;
     public string music;
     public float musicVolume;

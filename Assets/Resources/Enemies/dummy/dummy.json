@@ -29,6 +29,11 @@
       "duration": 2
     }
   ],
+  "banter": [
+    "You can't chase dih me!",
+    "Is that all you've got?",
+    "Keep running, it won't help!"
+  ],
   "sprite": "dummy.png",
   "music": "dummy.mp3",
   "musicVolume": 0.5

@@ -18,7 +18,6 @@ public class TransitionManager : MonoBehaviour {
     public float yMin;
 
     private const float fadeDuration = 0.6f;
-    private bool isTransitioning = false;
 
     public void Update() {
         if (player == null) return;
@@ -31,8 +30,6 @@ public class TransitionManager : MonoBehaviour {
     }
 
     private IEnumerator TransitionToNextRoom() {
-        isTransitioning = true;
-
         fadeImage.gameObject.SetActive(true);
 
         Color color = fadeImage.color;

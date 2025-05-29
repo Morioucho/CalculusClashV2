@@ -42,38 +42,23 @@ public class InitialDialogue : MonoBehaviour {
     }
 
     public IEnumerator LoadDialogues() {
-        string filePath = Path.Combine(Application.streamingAssetsPath, dialogueFile);
-        string jsonText;
+        TextAsset jsonAsset = Resources.Load<TextAsset>("Dialogues/initial_dialogue");
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-        using (UnityWebRequest www = UnityWebRequest.Get(filePath)) {
-                    yield return www.SendWebRequest();
-
-                    if (www.result == UnityWebRequest.Result.Success) {
-                        jsonText = www.downloadHandler.text;
-                    } else {
-                        Debug.LogError("Failed to load JSON in WebGL: " + www.error);
-
-                        yield break;
-                    }
-                }
-            }
-#else
-        if (File.Exists(filePath)) {
-            jsonText = File.ReadAllText(filePath);
-        } else {
-            Debug.LogError("File not found: " + filePath);
-
+        if (jsonAsset == null) {
+            Debug.LogError("Dialogue JSON not found in Resources/Dialogues/initial_dialogue");
             yield break;
         }
-#endif
+
+        string jsonText = jsonAsset.text;
         string[] loadedDialogues = JsonHelper.FromJson<string>(jsonText);
         dialogues.AddRange(loadedDialogues);
 
         Debug.Log("Loaded JSON: " + jsonText);
 
         PlayDialogue();
+        yield return null;
     }
+
 
     private IEnumerator FadeIn() {
         dialogueBox.SetActive(true);

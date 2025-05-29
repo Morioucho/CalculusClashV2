@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 
     public const string version = "1.1.0";
     public const bool developmentBuild = true;
-    public const string buildDate = "05-26-2025";
+    public const string buildDate = "05-28-2025";
 
     public float timeOfDay = 0.0f;
 

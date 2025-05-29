@@ -1,19 +1,15 @@
 using UnityEngine;
 
-using System.IO;
-
 public static class EnemyLoader {
     public static EnemyData LoadEnemy(string enemyId) {
-        string enemyFolder = Path.Combine(Application.streamingAssetsPath, "Enemies", enemyId.ToLower());
-        string path = Path.Combine(enemyFolder, enemyId.ToLower() + ".json");
+        string resourcePath = $"Enemies/{enemyId.ToLower()}/{enemyId.ToLower()}";
+        TextAsset jsonAsset = Resources.Load<TextAsset>(resourcePath);
 
-        if (File.Exists(path)) {
-            string json = File.ReadAllText(path);
-            return JsonUtility.FromJson<EnemyData>(json);
+        if (jsonAsset != null) {
+            return JsonUtility.FromJson<EnemyData>(jsonAsset.text);
         }
 
-        Debug.LogError("Enemy JSON not found: " + path);
-
+        Debug.LogError("Enemy JSON not found in Resources at: " + resourcePath);
         return null;
     }
 }
