@@ -23,5 +23,5 @@
   { "spriteIndex": 22, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 23, "spriteWidth": 128, "spriteHeight": 128, "correct": 1 },
   { "spriteIndex": 24, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
-  { "spriteIndex": 25, "spriteWidth": 128, "spriteHeight": 128, "correct": 1 }
+  { "spriteIndex": 25, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 }
 ]
