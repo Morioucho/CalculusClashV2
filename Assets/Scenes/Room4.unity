@@ -5439,8 +5439,9 @@ MonoBehaviour:
     cameraY: 0
   enemyIds:
   - integral_imp
+  - derivative_demon
   currentRoom: room4
-  encounterPercentagePerSecond: 20
+  encounterPercentagePerSecond: 25
 --- !u!114 &1650891264
 MonoBehaviour:
   m_ObjectHideFlags: 0

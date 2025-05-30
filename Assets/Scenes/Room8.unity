@@ -5129,8 +5129,9 @@ MonoBehaviour:
     cameraY: 0
   enemyIds:
   - applications_arbiter
+  - lagrange_reaper
   currentRoom: room8
-  encounterPercentagePerSecond: 20
+  encounterPercentagePerSecond: 35
 --- !u!114 &730963294
 MonoBehaviour:
   m_ObjectHideFlags: 0

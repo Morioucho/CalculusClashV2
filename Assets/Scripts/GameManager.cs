@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour {
     private AudioSource musicSource;
 
     public const string version = "1.1.0";
-    public const bool developmentBuild = true;
-    public const string buildDate = "05-28-2025";
+    public const bool developmentBuild = false;
+    public const string buildDate = "05-30-2025";
     public const int roomAmount = 10;
     public string currentBackgroundMusic;
 
