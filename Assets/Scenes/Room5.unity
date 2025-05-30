@@ -5859,9 +5859,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f8f4eff1f8c9a4da3f3b11f24cb49b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 468855448}
   transitionPanel: {fileID: 653220505}
-  bossObject: {fileID: 0}
+  bossObject: {fileID: 1789763596}
   activationRegion:
     x1: -10
     x2: 10

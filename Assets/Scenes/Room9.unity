@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f8f4eff1f8c9a4da3f3b11f24cb49b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1492500496}
   transitionPanel: {fileID: 1121481925}
-  bossObject: {fileID: 0}
+  bossObject: {fileID: 199336689}
   activationRegion:
     x1: -10
     x2: 10
@@ -5826,6 +5826,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50c28ec8f3e2022408e2a0b989b3df36, type: 3}
+--- !u!1 &1492500496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7594735302118627141, guid: 50c28ec8f3e2022408e2a0b989b3df36, type: 3}
+  m_PrefabInstance: {fileID: 1492500495}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1511994607
 GameObject:
   m_ObjectHideFlags: 0
