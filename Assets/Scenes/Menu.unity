@@ -210,7 +210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &348718891
 Transform:
   m_ObjectHideFlags: 0
@@ -1577,12 +1577,6 @@ MonoBehaviour:
   timeOfDay: 0
   encounterEnemyID: 
   previousScene: 
-  wentPrevious: 0
-  battleHandled: 1
-  isDialoguePlaying: 0
-  isBattlePlaying: 0
-  transferPositionX: 0
-  transferPositionY: 0
 --- !u!1 &1362339550
 GameObject:
   m_ObjectHideFlags: 0
