@@ -15,6 +15,9 @@
 > [!IMPORTANT]
 > The game is not tested on platforms other than Windows, such as macOS or your web browser. There is no gurantee that the game will run as intended.
 
+> [!CAUTION]
+> **When you run the game, ensure that you are using Alt + Enter to ensure that you are in full screen! This game was made in way shorter time than given as our other teachers such as Girvan and Brittain decided to also give us finals colliding with this. As a result, you'll have to use Alt + Enter to run it.**
+
 **If you wish to play the game, you can install the game from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You will have to download the `.zip` file and then right click and unzip to create a folder for the game. Following that, you can run the `CalculusClash.exe` in the folder. The keys that you have to use will be similar to other games with this genre.
 
 # Architecture
