@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     public string previousScene;
 
     public bool wentPrevious = false;
+    public bool battleHandled = true;
     public bool isDialoguePlaying = false;
     public bool isBattlePlaying = false;
     public float transferPositionX, transferPositionY;
@@ -50,6 +51,10 @@ public class GameManager : MonoBehaviour {
 
                 for (int i = 0; i < roomAmount + 1; ++i) {
                     roomPositions["room" + i] = new Position(0, 0);
+                }
+
+                for (int i = 0; i < roomAmount + 1; ++i) {
+                    roomPositions["Room" + i] = new Position(0, 0);
                 }
             }
         } else {

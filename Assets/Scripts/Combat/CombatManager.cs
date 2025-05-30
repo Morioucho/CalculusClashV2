@@ -71,7 +71,15 @@ public class CombatManager : MonoBehaviour {
 
     public void Start() {
         // Todo: Implement proper enemy loading via GameManager.
-        currEnemy = EnemyLoader.LoadEnemy(GameManager.instance.encounterEnemyID);
+        if (GameManager.instance != null) {
+            if (GameManager.instance.encounterEnemyID != null) {
+                currEnemy = EnemyLoader.LoadEnemy(GameManager.instance.encounterEnemyID);
+            } else {
+                currEnemy = EnemyLoader.LoadEnemy("dummy");
+            }
+        } else {
+            currEnemy = EnemyLoader.LoadEnemy("dummy");
+        }
 
         if (currEnemy != null) {
             currEnemyHp = currEnemy.health;

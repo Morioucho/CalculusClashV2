@@ -3,24 +3,23 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Encounter : MonoBehaviour {
+public class BossEncounter : MonoBehaviour {
     [SerializeField]
     public GameObject player;
     public GameObject transitionPanel;
+    public GameObject bossObject;
+
     public Region activationRegion;
 
-    public string[] enemyIds;
+    public string bossID;
     public string currentRoom;
-    public float encounterPercentagePerSecond;
-
-    private float timer = 0f;
 
     void Update() {
         if (!GameManager.instance.battleHandled) {
             player.transform.position = new Vector2(
-                    GameManager.instance.roomPositions[currentRoom].x,
-                    GameManager.instance.roomPositions[currentRoom].y
-                );
+                GameManager.instance.roomPositions[currentRoom].x,
+                GameManager.instance.roomPositions[currentRoom].y
+            );
 
             GameManager.instance.battleHandled = true;
         }
@@ -29,21 +28,15 @@ public class Encounter : MonoBehaviour {
             || GameManager.instance.isDialoguePlaying || GameManager.instance.isBattlePlaying)
             return;
 
-        timer += Time.deltaTime;
-
-        if (timer >= 1f) {
-            timer = 0f;
-
-            int roll = Random.Range(1, 101);
-
-            if (roll < encounterPercentagePerSecond) {
-                TriggerEncounter();
-            }
+        if(GameManager.instance.randomAccess.TryAdd(bossID, "completed")) {
+            TriggerEncounter();
+        } else {
+            bossObject.SetActive(false);
         }
     }
 
     private void TriggerEncounter() {
-        GameManager.instance.encounterEnemyID = enemyIds[Random.Range(0, enemyIds.Length)];
+        GameManager.instance.encounterEnemyID = bossID;
         GameManager.instance.previousScene = currentRoom;
 
         GameManager.instance.roomPositions[currentRoom].x = player.transform.position.x;
@@ -91,7 +84,6 @@ public class Encounter : MonoBehaviour {
             }
         }
 
-        GameManager.instance.battleHandled = false;
         SceneManager.LoadScene("Fight");
     }
 }
