@@ -20,18 +20,7 @@ public class Konami : MonoBehaviour {
     private int sequenceIndex = 0;
 
     void Update() {
-        if (CheckInput(sequence[sequenceIndex])) {
-            sequenceIndex++;
 
-            Debug.Log($"Konami sequence progress: {sequenceIndex}/{sequence.Length}");
-
-            if (sequenceIndex >= sequence.Length) {
-                special();
-                sequenceIndex = 0;
-            }
-        } else if (AnyInputPressed()) {
-            sequenceIndex = 0;
-        }
     }
 
     private bool CheckInput(KonamiInput input) {
