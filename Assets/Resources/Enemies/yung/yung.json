@@ -1,8 +1,11 @@
 {
   "id": "yung",
   "name": "Yung",
-  "unit": 5,
+  "unit": [
+    6
+  ],
   "health": 60,
+  "qt": 180,
   "dialogue": [
     {
       "text": "You might've not had me before..",

@@ -1,8 +1,11 @@
 {
   "id": "derivative_demon",
   "name": "Derivative Demon",
-  "unit": 2,
+  "unit": [
+    2
+  ],
   "health": 40,
+  "qt": 60,
   "dialogue": [
     {
       "text": "Derivatives are the key to understanding change..",

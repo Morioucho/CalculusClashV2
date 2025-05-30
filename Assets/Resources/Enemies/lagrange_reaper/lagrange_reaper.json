@@ -1,8 +1,11 @@
 {
   "id": "langrange_reaper",
   "name": "Lagrange Reaper",
-  "unit": 1,
+  "unit": [
+    5
+  ],
   "health": 100,
+  "qt": 60,
   "dialogue": [
     {
       "text": "They complained about Lagrange on the AP exam...",

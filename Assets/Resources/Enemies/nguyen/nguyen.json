@@ -1,8 +1,11 @@
 {
   "id": "nguyen",
   "name": "Nguyen",
-  "unit": 5,
+  "unit": [
+    7
+  ],
   "health": 80,
+  "qt": 180,
   "dialogue": [
     {
       "text": "Along with Math, I also know volleyball..",

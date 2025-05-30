@@ -1,8 +1,11 @@
 {
   "id": "jung",
   "name": "Jung",
-  "unit": 6,
+  "unit": [
+    8
+  ],
   "health": 100,
+  "qt": 180,
   "dialogue": [
     {
       "text": "This fight reminds me of World War 2..",

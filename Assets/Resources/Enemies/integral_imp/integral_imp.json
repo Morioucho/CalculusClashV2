@@ -1,8 +1,11 @@
 {
   "id": "integral_imp",
   "name": "Integral Imp",
-  "unit": 3,
+  "unit": [
+    3
+  ],
   "health": 50,
+  "qt": 120,
   "dialogue": [
     {
       "text": "Integrals are the key to understanding area and volume...",

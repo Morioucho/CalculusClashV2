@@ -1,8 +1,11 @@
 {
   "id": "applications_arbiter",
   "name": "Applications Arbiter",
-  "unit": 4,
+  "unit": [
+    4
+  ],
   "health": 60,
+  "qt": 150,
   "dialogue": [
     {
       "text": "You should've learned about applications in class...",

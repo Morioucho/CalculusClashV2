@@ -1,8 +1,11 @@
 {
   "id": "limit_lurker",
   "name": "Limit Lurker",
-  "unit": 1,
+  "unit": [
+    1
+  ],
   "health": 30,
+  "qt": 45,
   "dialogue": [
     {
       "text": "I'll bring you to your limit!",
