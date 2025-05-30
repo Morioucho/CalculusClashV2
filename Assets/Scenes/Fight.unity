@@ -659,7 +659,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Undefined
+  m_text: Student (you)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c7c56f5c818025c44a90d6ff5b9ab61d, type: 2}
   m_sharedMaterial: {fileID: -1666293393409097962, guid: c7c56f5c818025c44a90d6ff5b9ab61d, type: 2}
@@ -1219,7 +1219,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -0.075, y: 0}
+  m_AnchoredPosition: {x: -0.07501221, y: 0}
   m_SizeDelta: {x: -10.1498, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &883332371
