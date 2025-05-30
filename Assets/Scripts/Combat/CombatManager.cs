@@ -63,6 +63,8 @@ public class CombatManager : MonoBehaviour {
 
     private readonly float typewriterSpeed = 0.08f;
 
+    private Vector2 previousBossPosition;
+
     private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, ShowItems, End }
     private CombatState state = CombatState.Dialogue;
 
@@ -316,6 +318,13 @@ public class CombatManager : MonoBehaviour {
 
         var correct = questionButtonIndex == correctAnswerIndex;
 
+        if (enemyImage != null)
+            enemyImage.gameObject.SetActive(true);
+
+        if (enemyImage != null)
+            StartCoroutine(SlideBossImage(previousBossPosition, 0.3f));
+
+
         if (correct) {
             var damage = 10;
 
@@ -548,6 +557,19 @@ public class CombatManager : MonoBehaviour {
         isButtonEnabled = true;
     }
 
+    private IEnumerator SlideBossImage(Vector2 targetAnchoredPosition, float duration = 0.3f) {
+        RectTransform enemyRect = enemyImage.rectTransform;
+        Vector2 start = enemyRect.anchoredPosition;
+        float elapsed = 0f;
+
+        while (elapsed < duration) {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            enemyRect.anchoredPosition = Vector2.Lerp(start, targetAnchoredPosition, t);
+            yield return null;
+        }
+        enemyRect.anchoredPosition = targetAnchoredPosition;
+    }
 
     // MISC
     private void StartQuestion() {
@@ -561,7 +583,6 @@ public class CombatManager : MonoBehaviour {
         textbox.SetActive(false);
         questionBox.SetActive(true);
         questionImage.sprite = questionSprite;
-
         questionImage.preserveAspect = true;
 
         if (questionPanel != null && questionImage != null) {
@@ -576,8 +597,27 @@ public class CombatManager : MonoBehaviour {
         if (questionPanel != null)
             questionPanel.SetActive(true);
 
+        if (enemyImage != null) {
+            enemyImage.gameObject.SetActive(true);
+
+            RectTransform enemyRect = enemyImage.rectTransform;
+
+            previousBossPosition = enemyRect.anchoredPosition;
+
+            float slideAmount = 600f;
+            Vector2 targetPos = previousBossPosition + new Vector2(-slideAmount, 0);
+
+            StopCoroutine("SlideBossImage");
+            StartCoroutine(SlideBossImage(targetPos, 0.3f));
+        }
+
+
+        if (questionPanel != null)
+            questionPanel.SetActive(true);
+
+        // TODO: Find better implementation.
         if (enemyImage != null)
-            enemyImage.gameObject.SetActive(false);
+            // enemyImage.gameObject.SetActive(false);
 
         questionButtonIndex = 0;
         UpdateQuestionButtonSprites();
