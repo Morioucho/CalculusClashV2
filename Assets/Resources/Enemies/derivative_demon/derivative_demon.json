@@ -1,0 +1,24 @@
+{
+  "id": "derivative_demon",
+  "name": "Derivative Demon",
+  "unit": 2,
+  "health": 40,
+  "dialogue": [
+    {
+      "text": "Derivatives are the key to understanding change..",
+      "duration": 2
+    },
+    {
+      "text": "With this, I shall derive your defeat!",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "Derivatives will be your downfall!",
+    "You're nothing in the face of derivatives!",
+    "Derivatives are the essence of calculus!"
+  ],
+  "sprite": "derivative_demon.png",
+  "music": "limit_lurker.mp3",
+  "musicVolume": 0.2
+}

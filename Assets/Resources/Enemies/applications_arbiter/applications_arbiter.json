@@ -1,0 +1,25 @@
+{
+  "id": "applications_arbiter",
+  "name": "Applications Arbiter",
+  "unit": 4,
+  "health": 60,
+  "dialogue": [
+    {
+      "text": "You should've learned about applications in class...",
+      "duration": 2
+    },
+    {
+      "text": "And you should know they're not only applied in class!",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "You thought you could escape the applications?",
+    "Applications are everywhere, even here!",
+    "I'll ensure you never forget the applications!",
+    "You can see these applications all over the world!"
+  ],
+  "sprite": "applications_arbiter.png",
+  "music": "limit_lurker.mp3",
+  "musicVolume": 0.2
+}

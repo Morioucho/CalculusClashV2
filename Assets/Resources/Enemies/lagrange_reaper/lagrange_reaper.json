@@ -1,0 +1,26 @@
+{
+  "id": "langrange_reaper",
+  "name": "Lagrange Reaper",
+  "unit": 1,
+  "health": 100,
+  "dialogue": [
+    {
+      "text": "They complained about Lagrange on the AP exam...",
+      "duration": 2
+    },
+    {
+      "text": "Prepare yourself, for lagrange's justice!",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "I'll ensure you never forget Lagrange's theorem!",
+    "Lagrange's theorem is the key to your defeat!",
+    "You thought you could escape Lagrange's grasp?",
+    "Lagrange's theorem will be your undoing!",
+    "Lagrange's theorem is the path to your demise!"
+  ],
+  "sprite": "langrange_reaper.png",
+  "music": "limit_lurker.mp3",
+  "musicVolume": 0.2
+}

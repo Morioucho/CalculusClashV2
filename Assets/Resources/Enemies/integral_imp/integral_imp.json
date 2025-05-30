@@ -1,0 +1,24 @@
+{
+  "id": "integral_imp",
+  "name": "Integral Imp",
+  "unit": 3,
+  "health": 50,
+  "dialogue": [
+    {
+      "text": "Integrals are the key to understanding area and volume...",
+      "duration": 2
+    },
+    {
+      "text": "Integration will lead to your destruction!",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "Integration has been a challenge for many!",
+    "I will ensure you never forget the power of integration!!",
+    "I'll make sure you enjoy integration!"
+  ],
+  "sprite": "integral_imp.png",
+  "music": "limit_lurker.mp3",
+  "musicVolume": 0.2
+}
