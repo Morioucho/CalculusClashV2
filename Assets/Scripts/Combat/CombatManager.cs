@@ -40,7 +40,7 @@ public class CombatManager : MonoBehaviour {
     private AudioSource sfxSource;
     private AudioSource buttonSource;
 
-    private int currEnemyHp;
+    private float currEnemyHp;
 
     private bool isButtonEnabled = false;
     private bool isQuestionEnabled = false;
@@ -89,7 +89,7 @@ public class CombatManager : MonoBehaviour {
         }
 
         if (currEnemy != null) {
-            currEnemyHp = currEnemy.health;
+            currEnemyHp = (float) currEnemy.health;
 
             var sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
 
@@ -205,7 +205,6 @@ public class CombatManager : MonoBehaviour {
         DebugLocks();
         UpdateStar();
     }
-
 
     // UPDATE METHODS
     private void UpdateQuestionButtonSprites() {
@@ -334,7 +333,7 @@ public class CombatManager : MonoBehaviour {
             var damage = (float) System.Math.Round(20 * damageBar.value);
 
             StartCoroutine(HandleDamageAndContinue(damage));
-            currEnemyHp -= 10;
+            currEnemyHp -= damage;
         } else {
             playerLives -= 1;
             playerLivesText.text = playerLives.ToString();
@@ -437,7 +436,6 @@ public class CombatManager : MonoBehaviour {
         EnablePlayerChoice();
     }
 
-
     // COROUTINES
     private IEnumerator ShowDialogue() {
         textbox.SetActive(true);
@@ -478,6 +476,7 @@ public class CombatManager : MonoBehaviour {
             yield return new WaitForSeconds(typewriterSpeed);
         }
     }
+
     private IEnumerator ShowTipCoroutine(string tip) {
         textbox.SetActive(true);
         questionBox.SetActive(false);
@@ -498,6 +497,7 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
     }
+
     private IEnumerator ShowDamageText(float damageAmount) {
         if (damageText == null || enemyImage == null)
             yield break;
@@ -641,11 +641,12 @@ public class CombatManager : MonoBehaviour {
         questionTimeExpired = false;
         if (questionTimerCoroutine != null)
             StopCoroutine(questionTimerCoroutine);
-            questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine());
+
+        questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine());
 
 
         // TODO: Find better implementation.
-        if (enemyImage != null)
+        // if (enemyImage != null)
             // enemyImage.gameObject.SetActive(false);
 
         questionButtonIndex = 0;
@@ -678,7 +679,6 @@ public class CombatManager : MonoBehaviour {
         if (itemPanel != null)
             itemPanel.SetActive(false);
     }
-
 
     private void EnablePlayerChoice() {
         isButtonEnabled = true;
