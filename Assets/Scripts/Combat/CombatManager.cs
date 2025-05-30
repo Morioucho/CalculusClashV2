@@ -11,6 +11,7 @@ public class CombatManager : MonoBehaviour {
     [SerializeField]
     public Image enemyImage;
     public Image questionImage;
+    public Slider damageBar;
 
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI playerLivesText;
@@ -64,6 +65,10 @@ public class CombatManager : MonoBehaviour {
     private readonly float typewriterSpeed = 0.08f;
 
     private Vector2 previousBossPosition;
+
+    private Coroutine questionTimerCoroutine;
+    private float questionTimeLimit = 30f;
+    private bool questionTimeExpired = false;
 
     private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, ShowItems, End }
     private CombatState state = CombatState.Dialogue;
@@ -326,7 +331,7 @@ public class CombatManager : MonoBehaviour {
 
 
         if (correct) {
-            var damage = 10;
+            var damage = (float) System.Math.Round(20 * damageBar.value);
 
             StartCoroutine(HandleDamageAndContinue(damage));
             currEnemyHp -= 10;
@@ -412,7 +417,7 @@ public class CombatManager : MonoBehaviour {
         EnablePlayerChoice();
     }
 
-    private IEnumerator HandleDamageAndContinue(int damage) {
+    private IEnumerator HandleDamageAndContinue(float damage) {
         if (questionPanel != null)
             questionPanel.SetActive(false);
 
@@ -493,7 +498,7 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
     }
-    private IEnumerator ShowDamageText(int damageAmount) {
+    private IEnumerator ShowDamageText(float damageAmount) {
         if (damageText == null || enemyImage == null)
             yield break;
 
@@ -504,7 +509,6 @@ public class CombatManager : MonoBehaviour {
             this.dialogueText.text = "";
         }
 
-        // Load and play hit sound
         var hitClip = Resources.Load<AudioClip>("Audio/Combat/hit");
         if (hitClip != null && sfxSource != null) {
             sfxSource.clip = hitClip;
@@ -571,6 +575,22 @@ public class CombatManager : MonoBehaviour {
         enemyRect.anchoredPosition = targetAnchoredPosition;
     }
 
+    private IEnumerator QuestionTimerRoutine() {
+        float timer = questionTimeLimit;
+
+        while (timer > 0f) {
+            timer -= Time.deltaTime;
+
+            if (damageBar != null)
+                damageBar.value = Mathf.Clamp01(timer / questionTimeLimit);
+
+            yield return null;
+        }
+
+        if (damageBar != null)
+            damageBar.value = 0f;
+    }
+
     // MISC
     private void StartQuestion() {
         isButtonEnabled = false;
@@ -614,6 +634,15 @@ public class CombatManager : MonoBehaviour {
 
         if (questionPanel != null)
             questionPanel.SetActive(true);
+
+        if (damageBar != null)
+            damageBar.value = 1f;
+
+        questionTimeExpired = false;
+        if (questionTimerCoroutine != null)
+            StopCoroutine(questionTimerCoroutine);
+            questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine());
+
 
         // TODO: Find better implementation.
         if (enemyImage != null)
