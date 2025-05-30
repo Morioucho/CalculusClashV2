@@ -329,6 +329,9 @@ public class CombatManager : MonoBehaviour {
             StartCoroutine(SlideBossImage(previousBossPosition, 0.3f));
 
         if (correct) {
+            int randomIndex = Random.Range(0, currEnemy.correct.Length);
+            dialogueText.text = currEnemy.correct[randomIndex];
+
             var damage = (float) System.Math.Round(20 * damageBar.value);
 
             StartCoroutine(HandleDamageAndContinue(damage));
@@ -336,6 +339,9 @@ public class CombatManager : MonoBehaviour {
         } else {
             playerLives -= 1;
             playerLivesText.text = playerLives.ToString();
+
+            int randomIndex = Random.Range(0, currEnemy.wrong.Length);
+            dialogueText.text = currEnemy.wrong[randomIndex];
 
             if (playerLives <= 0) {
                 if (questionPanel != null)
