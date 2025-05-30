@@ -1,8 +1,11 @@
 {
   "id": "dummy",
   "name": "Dummy",
-  "unit": 1,
+  "unit": [
+    1
+  ],
   "health": 50,
+  "qt": 10,
   "dialogue": [
     {
       "text": "doko mademo chase dih",
