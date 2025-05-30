@@ -575,14 +575,14 @@ public class CombatManager : MonoBehaviour {
         enemyRect.anchoredPosition = targetAnchoredPosition;
     }
 
-    private IEnumerator QuestionTimerRoutine() {
-        float timer = questionTimeLimit;
+    private IEnumerator QuestionTimerRoutine(float duration) {
+        float timer = duration;
 
         while (timer > 0f) {
             timer -= Time.deltaTime;
 
             if (damageBar != null)
-                damageBar.value = Mathf.Clamp01(timer / questionTimeLimit);
+                damageBar.value = Mathf.Clamp01(timer / duration);
 
             yield return null;
         }
@@ -596,8 +596,25 @@ public class CombatManager : MonoBehaviour {
         isButtonEnabled = false;
         isQuestionEnabled = true;
         state = CombatState.Question;
-        
-        currentQuestion = QuestionLoader.GetRandomQuestion(currEnemy.unit, out var questionSprite);
+            
+        List<QuestionData> questionList = new List<QuestionData>();
+        List<Sprite> spriteList = new List<Sprite>();
+
+        foreach (int unitId in currEnemy.unit) {
+            Sprite sprite;
+            QuestionData q = QuestionLoader.GetRandomQuestion(unitId, out sprite);
+            
+            if (q != null) {
+                questionList.Add(q);
+                spriteList.Add(sprite);
+            }
+        }
+
+        int randomIndex = Random.Range(0, questionList.Count);
+
+        currentQuestion = questionList[randomIndex];
+        Sprite questionSprite = spriteList[randomIndex];
+
         correctAnswerIndex = currentQuestion.correct;
 
         textbox.SetActive(false);
@@ -642,7 +659,7 @@ public class CombatManager : MonoBehaviour {
         if (questionTimerCoroutine != null)
             StopCoroutine(questionTimerCoroutine);
 
-        questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine());
+        questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine((float) currEnemy.qt));
 
 
         // TODO: Find better implementation.
@@ -712,7 +729,10 @@ public class CombatManager : MonoBehaviour {
         isButtonEnabled = false;
 
         state = CombatState.ShowTip;
-        string tip = TipLoader.GetRandomTip(currEnemy.unit);
+
+        int index = UnityEngine.Random.Range(0, currEnemy.unit.Length);
+        var randomUnit = currEnemy.unit[index];
+        string tip = TipLoader.GetRandomTip(randomUnit);
 
         StartCoroutine(ShowTipCoroutine(tip));
     }
