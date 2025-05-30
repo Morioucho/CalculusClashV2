@@ -145,7 +145,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -197,6 +197,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -963,7 +976,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -972,7 +985,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      18_0: 2960402581040015946
+      18_1: 3464714492496936398
+      18_10: -226548114906440602
+      18_11: 5305586208840673758
+      18_12: -6964944961196041657
+      18_13: -3185198579930491464
+      18_14: -8629152444608508493
+      18_15: 2619553052598277693
+      18_16: -8672205113327090728
+      18_17: -5992320951404404411
+      18_18: 6594753886265646418
+      18_19: 7565506150154644761
+      18_2: 332710217683260096
+      18_20: 298314063788291241
+      18_21: -7440421731985548850
+      18_22: -8208510386624555353
+      18_23: 6583034603002692136
+      18_24: -8839391060092561429
+      18_25: 8081689358377574265
+      18_26: 6019650924021915978
+      18_27: -7532105667252346322
+      18_28: -7647957087123076571
+      18_29: -9119605888380754769
+      18_3: 7838619202069849571
+      18_30: -6600556919542200997
+      18_31: 5260759959189216675
+      18_32: -5280618749016292120
+      18_33: -245877164709453778
+      18_4: -7761605087467428150
+      18_5: -3869685955208043025
+      18_6: -6516384066600812096
+      18_7: -5620288706030872482
+      18_8: -1059617435541797054
+      18_9: 6030268624830614945
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
