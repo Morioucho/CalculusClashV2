@@ -328,7 +328,6 @@ public class CombatManager : MonoBehaviour {
         if (enemyImage != null)
             StartCoroutine(SlideBossImage(previousBossPosition, 0.3f));
 
-
         if (correct) {
             var damage = (float) System.Math.Round(20 * damageBar.value);
 

@@ -9,6 +9,8 @@
         public int qt;
         public DialogueLine[] dialogue;
         public string[] banter;
+        public string[] correct;
+        public string[] wrong;
         public string sprite;
         public string music;
         public float musicVolume;
