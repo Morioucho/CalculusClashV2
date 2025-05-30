@@ -4456,7 +4456,7 @@ MonoBehaviour:
     cameraX: 0
     cameraY: 0
   enemyIds:
-  - derivative_demon
+  - applications_arbiter
   currentRoom: room6
   encounterPercentagePerSecond: 20
 --- !u!114 &147399760
