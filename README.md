@@ -15,7 +15,7 @@
 > [!IMPORTANT]
 > The game is not tested on platforms other than Windows, such as macOS or your web browser. There is no gurantee that the game will run as intended.
 
-**If you wish to play the game, you can install the game from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You can also play the game using your controller, as the game is not a real-time action game. The keys that you have to use will be similar to other games with this genre.
+**If you wish to play the game, you can install the game from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You will have to download the `.zip` file and then right click and unzip to create a folder for the game. Following that, you can run the `CalculusClash.exe` in the folder. The keys that you have to use will be similar to other games with this genre.
 
 # Architecture
 > [!TIP]
