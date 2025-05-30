@@ -1,0 +1,24 @@
+{
+  "id": "nguyen",
+  "name": "Nguyen",
+  "unit": 5,
+  "health": 80,
+  "dialogue": [
+    {
+      "text": "Along with Math, I also know volleyball..",
+      "duration": 2
+    },
+    {
+      "text": "We'll have a volley good time!",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "Eh..",
+    "Even a kindergartener could hit harder than that.",
+    "You're seriously in AP Calculus?"
+  ],
+  "sprite": "nguyen.png",
+  "music": "nguyen.mp3",
+  "musicVolume": 0.2
+}

@@ -1,0 +1,24 @@
+{
+  "id": "yung",
+  "name": "Yung",
+  "unit": 5,
+  "health": 60,
+  "dialogue": [
+    {
+      "text": "You might've not had me before..",
+      "duration": 2
+    },
+    {
+      "text": "But rest assured, your destiny is sealed.",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "Ouch..",
+    "Is that all you've got?",
+    "You call that an attack??"
+  ],
+  "sprite": "yung.png",
+  "music": "yung.mp3",
+  "musicVolume": 0.2
+}

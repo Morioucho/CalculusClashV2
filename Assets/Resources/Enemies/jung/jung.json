@@ -1,0 +1,24 @@
+{
+  "id": "jung",
+  "name": "Jung",
+  "unit": 6,
+  "health": 100,
+  "dialogue": [
+    {
+      "text": "This fight reminds me of World War 2..",
+      "duration": 2
+    },
+    {
+      "text": "You'll know the Allied Powers won, just like Yung, Nguyen, Aureli, and I will.",
+      "duration": 2
+    }
+  ],
+  "banter": [
+    "womp womp",
+    "When you lose this, you'll have to write an LEQ regarding WW2.",
+    "Why are you talking AP Calculus when you could be taking AP World or APUSH??"
+  ],
+  "sprite": "jung.png",
+  "music": "jung.mp3",
+  "musicVolume": 0.2
+}
