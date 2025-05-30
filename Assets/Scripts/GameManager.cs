@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     public const bool developmentBuild = true;
     public const string buildDate = "05-28-2025";
     public const int roomAmount = 10;
+    public string currentBackgroundMusic;
 
     public float timeOfDay = 0.0f;
 
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour {
                 if (allItems != null && allItems.items != null) {
                     foreach (var item in allItems.items) {
                         if (!playerItems.ContainsKey(item.itemName)) {
-                            playerItems[item.itemName] = 5;
+                            playerItems[item.itemName] = 0;
                         }
                     }
                 }
