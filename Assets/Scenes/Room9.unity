@@ -7405,7 +7405,7 @@ MonoBehaviour:
     cameraX: 0
     cameraY: 0
   dialogueUI: {fileID: 1052886177}
-  player: {fileID: 0}
+  player: {fileID: 1492500496}
   dialogueText: {fileID: 940044387}
   speakerImage: {fileID: 2051321255}
 --- !u!114 &1843824940
