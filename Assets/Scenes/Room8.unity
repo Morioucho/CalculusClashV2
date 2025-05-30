@@ -5084,7 +5084,7 @@ MonoBehaviour:
     cameraY: 0
   enemyIds:
   - derivative_demon
-  currentRoom: room2
+  currentRoom: room8
   encounterPercentagePerSecond: 20
 --- !u!114 &730963294
 MonoBehaviour:
