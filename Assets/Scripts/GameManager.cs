@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour {
     public Dictionary<string, int> playerItems = new Dictionary<string, int>();
     public Dictionary<string, Position> roomPositions = new Dictionary<string, Position>();
 
+    // i hate this design but we have no other options........
+    public Dictionary<string, string> randomAccess = new Dictionary<string, string>();
+
     void Awake() {
         if (instance == null) {
             lock (this) {
@@ -41,6 +44,10 @@ public class GameManager : MonoBehaviour {
 
                 for (int i = 0; i < roomAmount + 1; ++i) {
                     roomPositions["room" + i] = new Position(0, 0);
+                }
+
+                for (int i = 0; i < 100; ++i) {
+                    randomAccess[i.ToString()] = "-1";
                 }
             }
         } else {
