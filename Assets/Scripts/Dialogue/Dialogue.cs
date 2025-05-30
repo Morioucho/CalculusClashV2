@@ -35,19 +35,22 @@ public class Dialogue : MonoBehaviour {
         public string speaker;
     }
 
-    void Start() {
+    public void Start() {
         LoadDialogueData();
 
         if (dialogueUI != null)
             dialogueUI.SetActive(false);
     }
 
-    void Update() {
-        if (region.Contains(player.transform.position.x, player.transform.position.y)) {
-            if (!hasPlayed) {
-                hasPlayed = true;
-                running = true;
-                NextDialogue();
+    public void Update() {
+        if (!running) {
+            if (region.Contains(player.transform.position.x, player.transform.position.y)) {
+                if (GameManager.instance.randomAccess.TryAdd(dialogueFileName, "completed")) {
+                    hasPlayed = true;
+                    running = true;
+
+                    NextDialogue();
+                }
             }
         }
 

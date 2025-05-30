@@ -45,10 +45,6 @@ public class GameManager : MonoBehaviour {
                 for (int i = 0; i < roomAmount + 1; ++i) {
                     roomPositions["room" + i] = new Position(0, 0);
                 }
-
-                for (int i = 0; i < 100; ++i) {
-                    randomAccess[i.ToString()] = "-1";
-                }
             }
         } else {
             Destroy(gameObject);
