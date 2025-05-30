@@ -19,7 +19,7 @@
 
 # Architecture
 > [!TIP]
-> If you would like a better description of each Class, Enum, Interface, and Abstract Class, you may want to refer to the dedicated documentation [here](/docs/README.md).
+> If you would like a better description of each Class, Enum, Interface, and Abstract Class, you may want to refer to all the code [here](https://github.com/Morioucho/CalculusClashV2/tree/main/Assets/Scripts).
 
 This game is made in C# using the Unity library to design the game. The game has separate packages that each manage their own concern. The game also depends on other libraries for critical features.
 
