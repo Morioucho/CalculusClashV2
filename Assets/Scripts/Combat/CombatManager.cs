@@ -780,24 +780,24 @@ public class CombatManager : MonoBehaviour {
 
         GameManager.instance.isBattlePlaying = false;
 
-        SceneManager.LoadScene(GameManager.GetInstance().previousScene);
-
         if (currEnemy.id.ToLower() == "chen") {
             Application.Quit();
         }
+
+        SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
 
     private void GameOver() {
         state = CombatState.End;
 
+        if (currEnemy.id.ToLower() == "chen") {
+            Application.Quit();
+        }
+
         GameManager.instance.isBattlePlaying = false;
         SceneManager.LoadScene("FailedGame");
 
         Debug.Log("Player Defeated");
-
-        if (currEnemy.id.ToLower() == "chen") {
-            Application.Quit();
-        }
     }
 
     // Helper Methods
