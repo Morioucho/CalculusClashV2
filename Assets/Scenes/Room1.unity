@@ -2492,10 +2492,14 @@ MonoBehaviour:
   player: {fileID: 5822700244610395731}
   fadeImage: {fileID: 1086768688}
   nextRoom: Room2
-  xMax: 10
-  xMin: 8
-  yMax: 2
-  yMin: -2
+  currRoom: Room1
+  activationRegion:
+    x1: 8
+    x2: 10
+    y1: -10
+    y2: 10
+    cameraX: 0
+    cameraY: 0
 --- !u!1 &280543634
 GameObject:
   m_ObjectHideFlags: 0
@@ -5363,7 +5367,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueFileName: room1
-  dialogueSpeaker: pythagoras
   region:
     x1: -3
     x2: 10

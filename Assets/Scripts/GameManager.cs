@@ -18,11 +18,17 @@ public class GameManager : MonoBehaviour {
     public string encounterEnemyID;
     public string previousScene;
 
+    public bool wentPrevious = false;
+    public bool isDialoguePlaying = false;
+    public bool isBattlePlaying = false;
+    public float transferPositionX, transferPositionY;
+
     public Dictionary<string, int> playerItems = new Dictionary<string, int>();
     public Dictionary<string, Position> roomPositions = new Dictionary<string, Position>();
 
     // i hate this design but we have no other options........
     public Dictionary<string, string> randomAccess = new Dictionary<string, string>();
+    public Dictionary<string, Vector2> previousPositions = new Dictionary<string, Vector2>();
 
     void Awake() {
         if (instance == null) {

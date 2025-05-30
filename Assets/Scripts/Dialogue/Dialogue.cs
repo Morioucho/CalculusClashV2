@@ -8,7 +8,6 @@ using System.Collections.Generic;
 public class Dialogue : MonoBehaviour {
     [SerializeField] 
     public string dialogueFileName;
-    public string dialogueSpeaker;
 
     private bool hasPlayed = false;
     private bool running = false;
@@ -63,6 +62,8 @@ public class Dialogue : MonoBehaviour {
     }
 
     private void NextDialogue() {
+        GameManager.instance.isDialoguePlaying = true;
+
         dialogueIndex = 0;
         if (dialogueUI != null)
             dialogueUI.SetActive(true);
@@ -106,6 +107,8 @@ public class Dialogue : MonoBehaviour {
 
         if (dialogueUI != null)
             dialogueUI.SetActive(false);
+        
+        GameManager.instance.isDialoguePlaying = false;
     }
 
     private IEnumerator TypeText(string fullText) {

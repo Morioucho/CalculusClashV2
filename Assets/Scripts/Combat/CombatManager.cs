@@ -675,11 +675,16 @@ public class CombatManager : MonoBehaviour {
         state = CombatState.End;
 
         Debug.Log("Enemy Defeated");
+
+        GameManager.instance.isBattlePlaying = false;
+
         SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
 
     private void GameOver() {
         state = CombatState.End;
+
+        GameManager.instance.isBattlePlaying = false;
 
         Debug.Log("Player Defeated");
     }

@@ -29,7 +29,8 @@ public class Encounter : MonoBehaviour {
     }
 
     void Update() {
-        if (!activationRegion.Contains(player.transform.position.x, player.transform.position.y))
+        if (!activationRegion.Contains(player.transform.position.x, player.transform.position.y)
+            || GameManager.instance.isDialoguePlaying || GameManager.instance.isBattlePlaying)
             return;
 
         timer += Time.deltaTime;
@@ -52,6 +53,7 @@ public class Encounter : MonoBehaviour {
         GameManager.instance.roomPositions[currentRoom].x = player.transform.position.x;
         GameManager.instance.roomPositions[currentRoom].y = player.transform.position.y;
 
+        GameManager.instance.isBattlePlaying = true;
         StartCoroutine(FadeAndLoadFight());
     }
 

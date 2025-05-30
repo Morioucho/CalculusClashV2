@@ -10,23 +10,30 @@ public class TransitionManager : MonoBehaviour {
     public Image fadeImage;
 
     public string nextRoom;
+    public string currRoom;
 
-    public float xMax;
-    public float xMin;
-
-    public float yMax;
-    public float yMin;
+    public Region activationRegion;
 
     private const float fadeDuration = 0.3f;
 
+    public void Start() {
+        if (GameManager.instance.wentPrevious) {
+            GameManager.instance.wentPrevious = false;
+
+            player.transform.position = GameManager.instance.previousPositions[currRoom];
+        }
+    }
+
     public void Update() {
-        if (player == null) return;
+        if (player == null || GameManager.instance.isBattlePlaying || GameManager.instance.isDialoguePlaying) return;
 
         Vector2 playerPosition = player.transform.position;
 
-        if (playerPosition.x < xMax && playerPosition.x > xMin &&
-            playerPosition.y < yMax && playerPosition.y > yMin)
+        if (activationRegion.Contains(player.transform.position.x, player.transform.position.y)) {
             StartCoroutine(TransitionToNextRoom());
+        }
+
+        GameManager.instance.previousPositions[currRoom] = playerPosition;
     }
 
     private IEnumerator TransitionToNextRoom() {
@@ -57,8 +64,5 @@ public class TransitionManager : MonoBehaviour {
         // Requires Update method..
         Debug.Log("Player x position: " + playerPosition.x);
         Debug.Log("Player y position: " + playerPosition.y);
-
-        Debug.Log("X range: " + xMin + " -> " + xMax);
-        Debug.Log("X range: " + yMin + " -> " + yMax);
     }
 }
