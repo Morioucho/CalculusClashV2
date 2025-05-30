@@ -4457,8 +4457,9 @@ MonoBehaviour:
     cameraY: 0
   enemyIds:
   - applications_arbiter
+  - integral_imp
   currentRoom: room6
-  encounterPercentagePerSecond: 20
+  encounterPercentagePerSecond: 25
 --- !u!114 &147399760
 MonoBehaviour:
   m_ObjectHideFlags: 0

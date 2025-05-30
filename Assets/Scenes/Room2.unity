@@ -220,6 +220,7 @@ MonoBehaviour:
     cameraY: 0
   enemyIds:
   - derivative_demon
+  - limit_lurker
   currentRoom: room2
   encounterPercentagePerSecond: 20
 --- !u!114 &97775468
