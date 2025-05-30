@@ -28,6 +28,19 @@
     "I'm very smart, I even graduated from High School early, don't expect a free win.",
     "Do you really think you can defeat your own Calculus teacher??"
   ],
+  
+  "correct": [
+    "You dare?!",
+    "That's not possible!",
+    "Know your place, fool!"
+  ],
+
+  "wrong": [
+    "MWAHAHAHAHA!",
+    "As expected.",
+    "I almost feel bad for giving you a chance. But I don't!"
+  ],
+
   "sprite": "aureli.png",
   "music": "aureli.mp3",
   "musicVolume": 0.2

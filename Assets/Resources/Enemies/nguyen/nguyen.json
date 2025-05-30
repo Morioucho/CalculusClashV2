@@ -21,6 +21,19 @@
     "Even a kindergartener could hit harder than that.",
     "You're seriously in AP Calculus?"
   ],
+
+  "correct": [
+    "Hmph.",
+    "Yes, give me more like that!",
+    "That was...exhilarating! Again!"
+  ],
+
+  "wrong": [
+    "Weak Sauce!",
+    "When will this get interesting?",
+    "Your destruction shall be my greatest pleasure!"
+  ],
+
   "sprite": "nguyen.png",
   "music": "nguyen.mp3",
   "musicVolume": 0.2

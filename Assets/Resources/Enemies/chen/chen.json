@@ -37,6 +37,19 @@
     "You're nothing in the face of derivatives!",
     "Derivatives are the essence of calculus!"
   ],
+
+  "correct": [
+    "Well done, I'm impressed.",
+    "I bet my videos taught you how to do that.",
+    "You'd do great on my unit tests!"
+  ],
+
+  "wrong": [
+    "Go watch Chen Math Academy right now!",
+    "You did not have precision, dedication, efficiency, accuracy, or perfection.",
+    "Keep studying for that formula final!"
+  ],
+
   "sprite": "chen.png",
   "music": "chen.mp3",
   "musicVolume": 0.2

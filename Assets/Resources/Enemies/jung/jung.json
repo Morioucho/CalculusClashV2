@@ -17,10 +17,23 @@
     }
   ],
   "banter": [
-    "womp womp",
-    "When you lose this, you'll have to write an LEQ regarding WW2.",
+    "Hee hee hee hee!",
+    "I love CollegeBoard!",
     "Why are you talking AP Calculus when you could be taking AP World or APUSH??"
   ],
+
+  "correct": [
+    "I’m assigning a pop quiz on this next time!",
+    "Write a DBQ on how you did it!",
+    "I'll give you 1000 worksheets and ten chapters of notes!"
+  ],
+
+  "wrong": [
+    "I told you math was fun!",
+    "Even Antigone could've done this!",
+    "womp womp"
+  ],
+
   "sprite": "jung.png",
   "music": "jung.mp3",
   "musicVolume": 0.2

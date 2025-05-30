@@ -8,21 +8,34 @@
   "qt": 60,
   "dialogue": [
     {
-      "text": "They complained about Lagrange on the AP exam...",
+      "text": "ThEy cOMpLAiNeD aBoUt LaGrANgE oN tHe AP eXAM...",
       "duration": 2
     },
     {
-      "text": "Prepare yourself, for lagrange's justice!",
+      "text": "PrEParE yoUrSElF, fOR LaGRaNgE'S jUStiCE!",
       "duration": 2
     }
   ],
   "banter": [
-    "I'll ensure you never forget Lagrange's theorem!",
-    "Lagrange's theorem is the key to your defeat!",
-    "You thought you could escape Lagrange's grasp?",
-    "Lagrange's theorem will be your undoing!",
-    "Lagrange's theorem is the path to your demise!"
+    "I'lL eNsUrE yoU nEVer foRgEt LagRaNGe's tHEOreM!",
+    "LaGRAnGe's ThEoREm iS tHe KEy tO yoUR dEfEAt!",
+    "YoU tHoHGhT yOu cOUlD eScAPE LAgRAnGe's grASP?",
+    "LaGrANGe's ThEorEm wIlL bE yOuR uNdOInG!",
+    "LAgRaNGe'S thEOreM iS tHE pATH tO YouR DemIsE!"
   ],
+
+  "correct": [
+    "YoU wIlL FaCE YouR EnD sOoN ENOugH!",
+    "yOU aRe nOthING bUt a fOoL!",
+    "yOu cAn'T DEfy FatE."
+  ],
+
+  "wrong": [
+    "thERe's nO HOpe fOr yoU.",
+    "nO OnE wILL cOmE tO hELp yOu!",
+    "aCCePT yOur DestINY, mUtT!"
+  ],
+
   "sprite": "langrange_reaper.png",
   "music": "limit_lurker.mp3",
   "musicVolume": 0.2

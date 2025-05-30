@@ -16,11 +16,25 @@
       "duration": 2
     }
   ],
+
   "banter": [
     "Ouch..",
     "Is that all you've got?",
     "You call that an attack??"
   ],
+
+  "correct": [
+    "Congrats, you're more competent than an Application Arbiter.",
+    "Well, I didn't expect that one.",
+    "Not bad, not bad."
+  ],
+
+  "wrong": [
+    "Tsk tsk tsk.",
+    "You have no place here in our Calculus Chamber!",
+    "How did you even get past the Derivative Demons?"
+  ],
+
   "sprite": "yung.png",
   "music": "yung.mp3",
   "musicVolume": 0.2

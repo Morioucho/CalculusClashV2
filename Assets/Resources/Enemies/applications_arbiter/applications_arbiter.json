@@ -22,6 +22,19 @@
     "I'll ensure you never forget the applications!",
     "You can see these applications all over the world!"
   ],
+
+  "correct": [
+    "Put away the AI and try to solve them on your own.",
+    "Just because you applied your skills once doesn't make you a hotshot.",
+    "I'll have harder problems for you to optimize soon enough!"
+  ],
+
+  "wrong": [
+    "That was unoptimal!",
+    "Don't try to apply your skills again.",
+    "Just like that! Keep falling to my problems!"
+  ],
+
   "sprite": "applications_arbiter.png",
   "music": "limit_lurker.mp3",
   "musicVolume": 0.2

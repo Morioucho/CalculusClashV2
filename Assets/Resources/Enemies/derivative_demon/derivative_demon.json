@@ -21,6 +21,19 @@
     "You're nothing in the face of derivatives!",
     "Derivatives are the essence of calculus!"
   ],
+
+  "correct": [
+    "Tsk. Lucky guess.",
+    "My opinion of you is increasing, but only by a bit.",
+    "I know you have ChatGPT out right now!"
+  ],
+
+  "wrong": [
+    "Know your place.",
+    "Get better.",
+    "Try harder. It's not going to work."
+  ],
+
   "sprite": "derivative_demon.png",
   "music": "limit_lurker.mp3",
   "musicVolume": 0.2
