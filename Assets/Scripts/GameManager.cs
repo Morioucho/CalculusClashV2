@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     public bool battleHandled = true;
     public bool isDialoguePlaying = false;
     public bool isBattlePlaying = false;
+    public bool wonGame = false;
     public float transferPositionX, transferPositionY;
 
     public Dictionary<string, int> playerItems = new Dictionary<string, int>();

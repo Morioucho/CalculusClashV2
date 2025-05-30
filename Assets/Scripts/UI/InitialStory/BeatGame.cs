@@ -42,10 +42,10 @@ public class BeatGame : MonoBehaviour {
     }
 
     public IEnumerator LoadDialogues() {
-        TextAsset jsonAsset = Resources.Load<TextAsset>("Dialogues/initial_dialogue");
+        TextAsset jsonAsset = Resources.Load<TextAsset>("Dialogues/beat_game");
 
         if (jsonAsset == null) {
-            Debug.LogError("Dialogue JSON not found in Resources/Dialogues/initial_dialogue");
+            Debug.LogError("Dialogue JSON not found in Resources/Dialogues/beat_game");
             yield break;
         }
 

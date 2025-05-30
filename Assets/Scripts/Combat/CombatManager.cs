@@ -783,24 +783,19 @@ public class CombatManager : MonoBehaviour {
 
         GameManager.instance.isBattlePlaying = false;
 
-        if (currEnemy.id.ToLower() == "chen") {
+        if (currEnemy.id.ToLower() == "chen" || currEnemy.name.ToLower() == "chen") {
             Application.Quit();
         }
+
+        if (currEnemy.id.ToLower() == "aureli" || currEnemy.name.ToLower() == "aureli") {
+            GameManager.instance.wonGame = true;
+        } 
 
         SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
 
     private void GameOver() {
-        state = CombatState.End;
-
-        if (currEnemy.id.ToLower() == "chen") {
-            Application.Quit();
-        }
-
-        GameManager.instance.isBattlePlaying = false;
         SceneManager.LoadScene("FailedGame");
-
-        Debug.Log("Player Defeated");
     }
 
     // Helper Methods
