@@ -77,6 +77,9 @@ public class CombatManager : MonoBehaviour {
     private int correctAnswerIndex;
 
     public void Start() {
+        int seed = System.DateTime.Now.Ticks.GetHashCode();
+        Random.InitState(seed);
+
         // Todo: Implement proper enemy loading via GameManager.
         if (GameManager.instance != null) {
             if (GameManager.instance.encounterEnemyID != null) {

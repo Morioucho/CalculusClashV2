@@ -15,6 +15,11 @@ public class Encounter : MonoBehaviour {
 
     private float timer = 0f;
 
+    void Start() {
+        int seed = System.DateTime.Now.Ticks.GetHashCode();
+        Random.InitState(seed);
+    }
+
     void Update() {
         if (!GameManager.instance.battleHandled) {
             player.transform.position = new Vector2(
