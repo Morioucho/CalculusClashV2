@@ -5085,7 +5085,7 @@ MonoBehaviour:
   enemyIds:
   - derivative_demon
   currentRoom: room2
-  encounterPercentagePerSecond: 10
+  encounterPercentagePerSecond: 20
 --- !u!114 &730963294
 MonoBehaviour:
   m_ObjectHideFlags: 0
