@@ -161,7 +161,7 @@ MonoBehaviour:
     y2: 10
     cameraX: 0
     cameraY: 0
-  bossID: aureli
+  bossId: aureli
   currentRoom: room9
 --- !u!114 &3647154
 MonoBehaviour:

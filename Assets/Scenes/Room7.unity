@@ -5224,7 +5224,7 @@ MonoBehaviour:
     y2: 10
     cameraX: 0
     cameraY: 0
-  bossID: jung
+  bossId: jung
   currentRoom: room7
 --- !u!114 &1047484485
 MonoBehaviour:

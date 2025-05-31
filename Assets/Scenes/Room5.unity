@@ -6254,7 +6254,7 @@ MonoBehaviour:
     y2: 10
     cameraX: 0
     cameraY: 0
-  bossID: nguyen
+  bossId: nguyen
   currentRoom: room5
 --- !u!114 &1746242118
 MonoBehaviour:

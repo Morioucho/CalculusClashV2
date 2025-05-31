@@ -6231,7 +6231,7 @@ MonoBehaviour:
     y2: 10
     cameraX: 0
     cameraY: 0
-  bossID: yung
+  bossId: yung
   currentRoom: room3
 --- !u!1 &1026790775
 GameObject:
