@@ -37,6 +37,17 @@
     "Is that all you've got?",
     "Keep running, it won't help!"
   ],
+    "correct": [
+    "You dare?!",
+    "That's not possible!",
+    "Know your place, fool!"
+  ],
+
+  "wrong": [
+    "MWAHAHAHAHA!",
+    "As expected.",
+    "I almost feel bad for giving you a chance. But I don't!"
+  ],
   "sprite": "dummy.png",
   "music": "dummy.mp3",
   "musicVolume": 0.5

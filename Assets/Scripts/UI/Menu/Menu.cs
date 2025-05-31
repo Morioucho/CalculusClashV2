@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
-using static Konami;
 using Unity.VisualScripting;
+
+using System.Collections;
 
 public class MenuScript : MonoBehaviour {
     public enum KonamiInput {

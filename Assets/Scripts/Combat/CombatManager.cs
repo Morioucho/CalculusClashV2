@@ -9,13 +9,15 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class CombatManager : MonoBehaviour {
-    [SerializeField] public Image enemyImage;
+    [SerializeField] 
+    public Image enemyImage;
     public Image questionImage;
     public Slider damageBar;
 
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI playerLivesText;
     public TextMeshProUGUI damageText;
+    public TextMeshProUGUI questionDebugObject;
 
     public GameObject textbox;
     public GameObject questionBox;
@@ -623,6 +625,7 @@ public class CombatManager : MonoBehaviour {
         var randomIndex = Random.Range(0, questionList.Count);
 
         currentQuestion = questionList[randomIndex];
+        questionDebugObject.text = $"Q: {currentQuestion.spriteIndex} *";
         var questionSprite = spriteList[randomIndex];
 
         correctAnswerIndex = currentQuestion.correct;
@@ -811,6 +814,8 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void DebugLocks() {
+        return;
+
         foreach (var key in new List<string>(actionLocks.Keys))
             Debug.Log(key + " -> " + actionLocks[key]);
     }
