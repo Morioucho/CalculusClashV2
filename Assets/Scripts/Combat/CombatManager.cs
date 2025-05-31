@@ -603,29 +603,43 @@ public class CombatManager : MonoBehaviour {
             damageBar.value = 0f;
     }
 
+    // Temporary POCO to store QuestionData and associated unitId
+    private class QuestionWithUnit {
+        public int UnitId { get; }
+        public QuestionData Question { get; }
+        public QuestionWithUnit(int unitId, QuestionData question) {
+            UnitId = unitId;
+            Question = question;
+        }
+    }
+
     // MISC
     private void StartQuestion() {
         isButtonEnabled = false;
         isQuestionEnabled = true;
         state = CombatState.Question;
 
-        var questionList = new List<QuestionData>();
         var spriteList = new List<Sprite>();
+        var questionWithUnits = new List<QuestionWithUnit>();
 
         foreach (var unitId in currEnemy.unit) {
             Sprite sprite;
             var q = QuestionLoader.GetRandomQuestion(unitId, out sprite);
 
             if (q != null) {
-                questionList.Add(q);
                 spriteList.Add(sprite);
+                questionWithUnits.Add(new QuestionWithUnit(unitId, q));
             }
         }
 
-        var randomIndex = Random.Range(0, questionList.Count);
+        foreach (var qwu in questionWithUnits) {
+            Debug.Log($"Unit: {qwu.UnitId}, Question SpriteIndex: {qwu.Question.spriteIndex}");
+        }
 
-        currentQuestion = questionList[randomIndex];
-        questionDebugObject.text = $"Q: {currentQuestion.spriteIndex} *";
+        var randomIndex = Random.Range(0, questionWithUnits.Count);
+
+        currentQuestion = questionWithUnits[randomIndex].Question;
+        questionDebugObject.text = $"U: {questionWithUnits[randomIndex].UnitId} Q: {currentQuestion.spriteIndex}";
         var questionSprite = spriteList[randomIndex];
 
         correctAnswerIndex = currentQuestion.correct;
@@ -659,7 +673,6 @@ public class CombatManager : MonoBehaviour {
             StartCoroutine(SlideBossImage(targetPos));
         }
 
-
         if (questionPanel != null)
             questionPanel.SetActive(true);
 
@@ -671,7 +684,6 @@ public class CombatManager : MonoBehaviour {
             StopCoroutine(questionTimerCoroutine);
 
         questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine(currEnemy.qt));
-
 
         // TODO: Find better implementation.
         // if (enemyImage != null)
