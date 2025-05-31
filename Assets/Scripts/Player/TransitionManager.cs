@@ -14,17 +14,19 @@ public class TransitionManager : MonoBehaviour {
 
     public Region activationRegion;
 
-    private const float fadeDuration = 0.3f;
+    private const float KFadeDuration = 0.3f;
 
-    public void Start() {
-        if (GameManager.instance.wentPrevious) {
-            GameManager.instance.wentPrevious = false;
-
-            player.transform.position = GameManager.instance.previousPositions[currRoom];
+    private void Start() {
+        if (!GameManager.instance.wentPrevious) {
+            return;
         }
+
+        GameManager.instance.wentPrevious = false;
+
+        player.transform.position = GameManager.instance.previousPositions[currRoom];
     }
 
-    public void Update() {
+    private void Update() {
         if (player == null || GameManager.instance.isBattlePlaying || GameManager.instance.isDialoguePlaying) return;
 
         Vector2 playerPosition = player.transform.position;
@@ -39,17 +41,17 @@ public class TransitionManager : MonoBehaviour {
     private IEnumerator TransitionToNextRoom() {
         fadeImage.gameObject.SetActive(true);
 
-        Color color = fadeImage.color;
+        var color = fadeImage.color;
         color.a = 0;
 
         fadeImage.color = color;
 
-        float elapsed = 0f;
+        var elapsed = 0f;
 
-        while (elapsed < fadeDuration) {
+        while (elapsed < KFadeDuration) {
             elapsed += Time.deltaTime;
 
-            float alpha = Mathf.Clamp01(elapsed / fadeDuration);
+            var alpha = Mathf.Clamp01(elapsed / KFadeDuration);
 
             color.a = alpha;
             fadeImage.color = color;
@@ -58,11 +60,5 @@ public class TransitionManager : MonoBehaviour {
         }
 
         SceneManager.LoadScene(nextRoom);
-    }
-
-    private void debugUtil(Vector2 playerPosition) {
-        // Requires Update method..
-        Debug.Log("Player x position: " + playerPosition.x);
-        Debug.Log("Player y position: " + playerPosition.y);
     }
 }

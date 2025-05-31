@@ -1,4 +1,6 @@
-[System.Serializable]
+using System;
+
+[Serializable]
 public class Region {
     public int x1, x2, y1, y2;
     public int cameraX, cameraY;

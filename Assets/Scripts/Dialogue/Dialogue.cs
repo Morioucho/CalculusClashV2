@@ -1,16 +1,12 @@
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-
-using System.Collections;
-using System.Collections.Generic;
 
 public class Dialogue : MonoBehaviour {
-    [SerializeField] 
-    public string dialogueFileName;
+    [SerializeField] public string dialogueFileName;
 
-    private bool hasPlayed = false;
-    private bool running = false;
     public Region region;
 
     public GameObject dialogueUI;
@@ -19,15 +15,18 @@ public class Dialogue : MonoBehaviour {
     public TextMeshProUGUI dialogueText;
     public Image speakerImage;
 
-    private float typewriterSpeed = 0.05f;
+    private const float KTypewriterSpeed = 0.05f;
 
     private DialogueLine[] dialogueLines;
-    private int dialogueIndex = 0;
+    private int dialogueIndex;
 
-    private bool waitingForEnter = false;
-    private bool skipTypewriter = false;
+    private bool hasPlayed;
+    private bool running;
 
-    [System.Serializable]
+    private bool waitingForEnter;
+    private bool skipTypewriter;
+
+    [Serializable]
     public class DialogueLine {
         public string text;
         public float duration;
@@ -42,16 +41,14 @@ public class Dialogue : MonoBehaviour {
     }
 
     public void Update() {
-        if (!running) {
-            if (region.Contains(player.transform.position.x, player.transform.position.y)) {
+        if (!running)
+            if (region.Contains(player.transform.position.x, player.transform.position.y))
                 if (GameManager.instance.randomAccess.TryAdd(dialogueFileName, "completed")) {
                     hasPlayed = true;
                     running = true;
 
                     NextDialogue();
                 }
-            }
-        }
 
         if (!running || !Input.GetKeyDown(KeyCode.Return)) return;
 
@@ -73,23 +70,24 @@ public class Dialogue : MonoBehaviour {
 
     private IEnumerator ShowDialogue() {
         while (dialogueIndex < dialogueLines.Length) {
-            string currentSpeaker = dialogueLines[dialogueIndex].speaker;
+            var currentSpeaker = dialogueLines[dialogueIndex].speaker;
 
             if (speakerImage != null && !string.IsNullOrEmpty(currentSpeaker)) {
-                Sprite speakerSprite = Resources.Load<Sprite>("Icons/" + currentSpeaker);
+                var speakerSprite = Resources.Load<Sprite>("Icons/" + currentSpeaker);
 
                 if (speakerSprite != null) {
                     speakerImage.sprite = speakerSprite;
                     speakerImage.enabled = true;
                     speakerImage.preserveAspect = true;
 
-                    RectTransform imageRect = speakerImage.rectTransform;
+                    var imageRect = speakerImage.rectTransform;
 
-                    float targetWidth = imageRect.rect.width;
-                    float aspect = speakerSprite.rect.height / speakerSprite.rect.width;
+                    var targetWidth = imageRect.rect.width;
+                    var aspect = speakerSprite.rect.height / speakerSprite.rect.width;
 
                     imageRect.sizeDelta = new Vector2(targetWidth, targetWidth * aspect);
-                } else {
+                }
+                else {
                     Debug.LogWarning("Speaker image not found for: " + currentSpeaker);
                     speakerImage.enabled = false;
                 }
@@ -98,16 +96,14 @@ public class Dialogue : MonoBehaviour {
             yield return StartCoroutine(TypeText(dialogueLines[dialogueIndex].text));
             waitingForEnter = true;
 
-            while (waitingForEnter) {
-                yield return null;
-            }
+            while (waitingForEnter) yield return null;
 
             dialogueIndex++;
         }
 
         if (dialogueUI != null)
             dialogueUI.SetActive(false);
-        
+
         GameManager.instance.isDialoguePlaying = false;
     }
 
@@ -115,19 +111,20 @@ public class Dialogue : MonoBehaviour {
         dialogueText.text = "";
         skipTypewriter = false;
 
-        foreach (char c in fullText) {
+        foreach (var c in fullText) {
             if (skipTypewriter) {
                 dialogueText.text = fullText;
                 break;
             }
 
             dialogueText.text += c;
-            yield return new WaitForSeconds(typewriterSpeed);
+            yield return new WaitForSeconds(KTypewriterSpeed);
         }
     }
 
     private void LoadDialogueData() {
-        TextAsset jsonAsset = Resources.Load<TextAsset>("Dialogues/" + dialogueFileName);
+        var jsonAsset = Resources.Load<TextAsset>("Dialogues/" + dialogueFileName);
+
         if (jsonAsset == null) {
             Debug.LogError("Dialogue file not found: " + dialogueFileName);
             return;
@@ -135,9 +132,9 @@ public class Dialogue : MonoBehaviour {
 
         dialogueLines = JsonHelper.FromJson<DialogueLine>(jsonAsset.text);
 
-        if (dialogueLines == null || dialogueLines.Length == 0) {
-            Debug.LogWarning("No dialogue lines found in file: " + dialogueFileName);
+        if (dialogueLines != null || dialogueLines.Length > 0)
             return;
-        }
+
+        Debug.LogWarning("No dialogue lines found in file: " + dialogueFileName);
     }
 }

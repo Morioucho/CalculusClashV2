@@ -11,24 +11,24 @@ public class BossEncounter : MonoBehaviour {
 
     public Region activationRegion;
 
-    public string bossID;
+    public string bossId;
     public string currentRoom;
 
     void Update() {
-        if (!GameManager.instance.battleHandled) {
+        if (!GameManager.instance.isBattleHandled) {
             player.transform.position = new Vector2(
-                GameManager.instance.roomPositions[currentRoom].x,
-                GameManager.instance.roomPositions[currentRoom].y
+                GameManager.instance.roomPositions[currentRoom].X,
+                GameManager.instance.roomPositions[currentRoom].Y
             );
 
-            GameManager.instance.battleHandled = true;
+            GameManager.instance.isBattleHandled = true;
         }
 
         if (!activationRegion.Contains(player.transform.position.x, player.transform.position.y)
             || GameManager.instance.isDialoguePlaying || GameManager.instance.isBattlePlaying)
             return;
 
-        if(GameManager.instance.randomAccess.TryAdd(bossID, "completed")) {
+        if(GameManager.instance.randomAccess.TryAdd(bossId, "completed")) {
             TriggerEncounter();
         } else {
             bossObject.SetActive(false);
@@ -36,11 +36,11 @@ public class BossEncounter : MonoBehaviour {
     }
 
     private void TriggerEncounter() {
-        GameManager.instance.encounterEnemyID = bossID;
-        GameManager.instance.previousScene = currentRoom;
+        var updatedPosition = new Position(player.transform.position.x, player.transform.position.y);
+        GameManager.instance.roomPositions[currentRoom] = updatedPosition;
 
-        GameManager.instance.roomPositions[currentRoom].x = player.transform.position.x;
-        GameManager.instance.roomPositions[currentRoom].y = player.transform.position.y;
+        GameManager.instance.encounterEnemyId = bossId;
+        GameManager.instance.previousScene = currentRoom;
 
         GameManager.instance.isBattlePlaying = true;
         StartCoroutine(FadeAndLoadFight());
@@ -61,7 +61,7 @@ public class BossEncounter : MonoBehaviour {
         }
 
         if (transitionPanel != null) {
-            Image panelImage = transitionPanel.GetComponent<Image>();
+            var panelImage = transitionPanel.GetComponent<Image>();
             if (panelImage != null) {
                 transitionPanel.SetActive(true);
 

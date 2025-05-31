@@ -16,9 +16,9 @@ public class PlayerMovement : MonoBehaviour {
     private bool isFrozen = false;
     private Vector2 savedPosition;
 
-    List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+    private readonly List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
 
-    void Start() {
+    private void Start() {
         this.rb = GetComponent<Rigidbody2D>();
     }
 

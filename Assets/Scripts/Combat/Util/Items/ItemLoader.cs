@@ -25,3 +25,16 @@ public static class ItemLoader {
         return items;
     }
 }
+
+[System.Serializable]
+public class ItemData {
+    public string itemName;
+    public string id;
+    public float damageBuff;
+    public float liveAmount;
+}
+
+[System.Serializable]
+public class ItemList {
+    public List<ItemData> items;
+}

@@ -19,3 +19,8 @@ public static class TipLoader {
         return tipList.tips[index];
     }
 }
+
+[System.Serializable]
+public class TipList {
+    public List<string> tips;
+}

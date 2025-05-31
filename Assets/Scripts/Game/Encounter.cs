@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Encounter : MonoBehaviour {
-    [SerializeField]
+    [SerializeField] 
     public GameObject player;
     public GameObject transitionPanel;
     public Region activationRegion;
@@ -13,21 +15,21 @@ public class Encounter : MonoBehaviour {
     public string currentRoom;
     public float encounterPercentagePerSecond;
 
-    private float timer = 0f;
+    private float timer;
 
-    void Start() {
-        int seed = System.DateTime.Now.Ticks.GetHashCode();
+    private void Start() {
+        var seed = DateTime.Now.Ticks.GetHashCode();
         Random.InitState(seed);
     }
 
-    void Update() {
-        if (!GameManager.instance.battleHandled) {
+    private void Update() {
+        if (!GameManager.instance.isBattleHandled) {
             player.transform.position = new Vector2(
-                    GameManager.instance.roomPositions[currentRoom].x,
-                    GameManager.instance.roomPositions[currentRoom].y
-                );
+                GameManager.instance.roomPositions[currentRoom].X,
+                GameManager.instance.roomPositions[currentRoom].Y
+            );
 
-            GameManager.instance.battleHandled = true;
+            GameManager.instance.isBattleHandled = true;
         }
 
         if (!activationRegion.Contains(player.transform.position.x, player.transform.position.y)
@@ -36,33 +38,45 @@ public class Encounter : MonoBehaviour {
 
         timer += Time.deltaTime;
 
-        if (timer >= 1f) {
-            timer = 0f;
+        if (timer < 1f) return;
 
-            int roll = Random.Range(1, 101);
+        timer = 0f;
 
-            if (roll < encounterPercentagePerSecond) {
-                TriggerEncounter();
-            }
+        var roll = Random.Range(1, 101);
+        if (roll == 1) {
+            TriggerLagrange();
+        } else if (roll < encounterPercentagePerSecond) {
+            TriggerEncounter();
         }
     }
 
     private void TriggerEncounter() {
-        GameManager.instance.encounterEnemyID = enemyIds[Random.Range(0, enemyIds.Length)];
+        var updatedPosition = new Position(player.transform.position.x, player.transform.position.y);
+        GameManager.instance.roomPositions[currentRoom] = updatedPosition;
+
+        GameManager.instance.encounterEnemyId = enemyIds[Random.Range(0, enemyIds.Length)];
         GameManager.instance.previousScene = currentRoom;
 
-        GameManager.instance.roomPositions[currentRoom].x = player.transform.position.x;
-        GameManager.instance.roomPositions[currentRoom].y = player.transform.position.y;
+        GameManager.instance.isBattlePlaying = true;
+        StartCoroutine(FadeAndLoadFight());
+    }
+
+    private void TriggerLagrange() {
+        var updatedPosition = new Position(player.transform.position.x, player.transform.position.y);
+        GameManager.instance.roomPositions[currentRoom] = updatedPosition;
+
+        GameManager.instance.encounterEnemyId = "lagrange_reaper";
+        GameManager.instance.previousScene = currentRoom;
 
         GameManager.instance.isBattlePlaying = true;
         StartCoroutine(FadeAndLoadFight());
     }
 
     private IEnumerator FadeAndLoadFight() {
-        AudioClip alertClip = Resources.Load<AudioClip>("SFX/alert");
+        var alertClip = Resources.Load<AudioClip>("SFX/alert");
 
         if (alertClip != null) {
-            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+            var audioSource = gameObject.AddComponent<AudioSource>();
 
             audioSource.clip = alertClip;
             audioSource.Play();
@@ -73,13 +87,13 @@ public class Encounter : MonoBehaviour {
         }
 
         if (transitionPanel != null) {
-            Image panelImage = transitionPanel.GetComponent<Image>();
+            var panelImage = transitionPanel.GetComponent<Image>();
             if (panelImage != null) {
                 transitionPanel.SetActive(true);
 
-                Color color = panelImage.color;
-                float duration = 0.3f;
-                float elapsed = 0f;
+                var color = panelImage.color;
+                var duration = 0.3f;
+                var elapsed = 0f;
 
                 color.a = 0f;
                 panelImage.color = color;
@@ -96,7 +110,7 @@ public class Encounter : MonoBehaviour {
             }
         }
 
-        GameManager.instance.battleHandled = false;
+        GameManager.instance.isBattleHandled = false;
         SceneManager.LoadScene("Fight");
     }
 }

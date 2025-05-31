@@ -7,10 +7,10 @@ public class Version : MonoBehaviour {
     private void Awake() {
         string versionText = "";
 
-        versionText += "Version: " + GameManager.version;
+        versionText += "Version: " + GameManager.KVersion;
 
-        if (GameManager.developmentBuild) {
-            versionText += " (DEV) " + GameManager.buildDate;
+        if (GameManager.KDevelopmentBuild) {
+            versionText += " (DEV) " + GameManager.KBuildDate;
         }
 
         textBox.text = versionText;

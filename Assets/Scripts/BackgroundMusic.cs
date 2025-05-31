@@ -1,54 +1,58 @@
 using UnityEngine;
 
 public class BackgroundMusic : MonoBehaviour {
-    [SerializeField]
-    public string musicFile;
+    [SerializeField] public string musicFile;
 
-    private static AudioSource musicSource;
-    private static string currentMusicFile = "";
-    private static float lastPlaybackTime = 0f;
+    private static AudioSource _musicSource;
+    private static string _currentMusicFile = "";
+    private static float _lastPlaybackTime;
 
-    void Start() {
-        if (musicSource == null){
-            GameObject musicObj = new GameObject("BackgroundMusicSource");
-            musicSource = musicObj.AddComponent<AudioSource>();
-            musicSource.loop = true;
+    private void Start() {
+        if (_musicSource == null) {
+            var musicObj = new GameObject("BackgroundMusicSource");
+
+            _musicSource = musicObj.AddComponent<AudioSource>();
+            _musicSource.loop = true;
+
             DontDestroyOnLoad(musicObj);
         }
 
-        if (currentMusicFile == musicFile) {
-            if (!musicSource.isPlaying) {
-                musicSource.time = lastPlaybackTime;
-                musicSource.Play();
-            }
+        if (_currentMusicFile == musicFile) {
+            if (_musicSource.isPlaying) return;
 
-            return;
+            _musicSource.time = _lastPlaybackTime;
+            _musicSource.Play();
         }
 
-        AudioClip clip = Resources.Load<AudioClip>(musicFile);
+        var clip = Resources.Load<AudioClip>(musicFile);
         if (clip != null) {
-            musicSource.Stop();
-            musicSource.clip = clip;
-            musicSource.time = 0f;
-            musicSource.Play();
-            currentMusicFile = musicFile;
-            lastPlaybackTime = 0f;
-        } else {
+            _musicSource.Stop();
+
+            _musicSource.clip = clip;
+            _musicSource.time = 0f;
+
+            _musicSource.Play();
+
+            _currentMusicFile = musicFile;
+            _lastPlaybackTime = 0f;
+        }
+        else {
             Debug.LogWarning("Music file not found: " + musicFile);
         }
     }
 
-    void Update() {
+    private void Update() {
         if (GameManager.instance.isBattlePlaying) {
-            if (musicSource.isPlaying) {
-                lastPlaybackTime = musicSource.time;
-                musicSource.Pause();
-            }
-        } else {
-            if (!musicSource.isPlaying && musicSource.clip != null) {
-                musicSource.time = lastPlaybackTime;
-                musicSource.Play();
-            }
+            if (!_musicSource.isPlaying) return;
+
+            _lastPlaybackTime = _musicSource.time;
+            _musicSource.Pause();
+        }
+        else {
+            if (_musicSource.isPlaying && _musicSource.clip == null) return;
+
+            _musicSource.time = _lastPlaybackTime;
+            _musicSource.Play();
         }
     }
 }

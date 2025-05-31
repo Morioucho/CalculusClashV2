@@ -1,15 +1,15 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
-
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class CombatManager : MonoBehaviour {
-    [SerializeField]
-    public Image enemyImage;
+    [SerializeField] public Image enemyImage;
     public Image questionImage;
     public Slider damageBar;
 
@@ -29,10 +29,10 @@ public class CombatManager : MonoBehaviour {
 
     public int playerLives = 3;
 
-    private int buttonIndex = 0;
-    private int itemIndex = 0;
-    private int questionButtonIndex = 0;
-    private int dialogueIndex = 0;
+    private int buttonIndex;
+    private int itemIndex;
+    private int questionButtonIndex;
+    private int dialogueIndex;
 
     private EnemyData currEnemy;
 
@@ -42,13 +42,13 @@ public class CombatManager : MonoBehaviour {
 
     private float currEnemyHp;
 
-    private bool isButtonEnabled = false;
-    private bool isQuestionEnabled = false;
+    private bool isButtonEnabled;
+    private bool isQuestionEnabled;
 
-    private bool skipTypewriter = false;
-    private bool waitingForEnter = false;
+    private bool skipTypewriter;
+    private bool waitingForEnter;
 
-    private Dictionary<string, bool> actionLocks = new Dictionary<string, bool>();
+    private readonly Dictionary<string, bool> actionLocks = new();
 
     private List<Sprite> menuSelectedSprites;
     private List<Sprite> menuUnselectedSprites;
@@ -57,10 +57,10 @@ public class CombatManager : MonoBehaviour {
     private List<Sprite> questionUnselectedSprites;
 
     private ItemList items;
-    private readonly List<ItemData> displayableItems = new List<ItemData>();
+    private readonly List<ItemData> displayableItems = new();
 
     private readonly Color defaultColor = Color.white;
-    private readonly Color selectedColor = new Color((123f / 255f), (163f / 255f), (217f / 255f));
+    private readonly Color selectedColor = new(123f / 255f, 163f / 255f, 217f / 255f);
 
     private readonly float typewriterSpeed = 0.08f;
 
@@ -68,31 +68,40 @@ public class CombatManager : MonoBehaviour {
 
     private Coroutine questionTimerCoroutine;
     private float questionTimeLimit = 30f;
-    private bool questionTimeExpired = false;
+    private bool questionTimeExpired;
 
-    private enum CombatState { Dialogue, PlayerChoice, Question, EnemyTurn, ShowTip, ShowItems, End }
+    private enum CombatState {
+        Dialogue,
+        PlayerChoice,
+        Question,
+        EnemyTurn,
+        ShowTip,
+        ShowItems,
+        End
+    }
+
     private CombatState state = CombatState.Dialogue;
 
     private QuestionData currentQuestion;
     private int correctAnswerIndex;
 
     public void Start() {
-        int seed = System.DateTime.Now.Ticks.GetHashCode();
+        var seed = DateTime.Now.Ticks.GetHashCode();
         Random.InitState(seed);
 
         // Todo: Implement proper enemy loading via GameManager.
         if (GameManager.instance != null) {
-            if (GameManager.instance.encounterEnemyID != null) {
-                currEnemy = EnemyLoader.LoadEnemy(GameManager.instance.encounterEnemyID);
-            } else {
+            if (GameManager.instance.encounterEnemyId != null)
+                currEnemy = EnemyLoader.LoadEnemy(GameManager.instance.encounterEnemyId);
+            else
                 currEnemy = EnemyLoader.LoadEnemy("dummy");
-            }
-        } else {
+        }
+        else {
             currEnemy = EnemyLoader.LoadEnemy("dummy");
         }
 
         if (currEnemy != null) {
-            currEnemyHp = (float) currEnemy.health;
+            currEnemyHp = currEnemy.health;
 
             var sprite = Resources.Load<Sprite>("EnemySprites/" + Path.GetFileNameWithoutExtension(currEnemy.sprite));
 
@@ -119,16 +128,14 @@ public class CombatManager : MonoBehaviour {
             questionPanel.SetActive(false);
 
         // Load items
-        this.items = ItemLoader.GetAllItems();
-        Debug.Log($"Loaded items: {this.items?.items?.Count ?? -1}");
+        items = ItemLoader.GetAllItems();
+        Debug.Log($"Loaded items: {items?.items?.Count ?? -1}");
 
         // Populate displayableItems with all items
         displayableItems.Clear();
-        if (items != null && items.items != null) {
-            foreach (var item in items.items) {
+        if (items != null && items.items != null)
+            foreach (var item in items.items)
                 displayableItems.Add(item);
-            }
-        }
 
         // Load button sprites
         string[] spriteNames = { "Solve", "Help", "Item", "Skip" };
@@ -211,10 +218,10 @@ public class CombatManager : MonoBehaviour {
 
     // UPDATE METHODS
     private void UpdateQuestionButtonSprites() {
-        for (int i = 0; i < questionButtons.Count; ++i) {
+        for (var i = 0; i < questionButtons.Count; ++i) {
             var img = questionButtons[i].GetComponent<Image>();
 
-            img.sprite = (i == questionButtonIndex) ? questionSelectedSprites[i] : questionUnselectedSprites[i];
+            img.sprite = i == questionButtonIndex ? questionSelectedSprites[i] : questionUnselectedSprites[i];
         }
     }
 
@@ -223,55 +230,53 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void UpdateButtonSprites() {
-        for (int i = 0; i < buttons.Count; ++i) {
+        for (var i = 0; i < buttons.Count; ++i) {
             var img = buttons[i].GetComponent<Image>();
 
-            img.sprite = (i == buttonIndex) ? menuSelectedSprites[i] : menuUnselectedSprites[i];
+            img.sprite = i == buttonIndex ? menuSelectedSprites[i] : menuUnselectedSprites[i];
         }
     }
 
     private void UpdateItemOptions() {
-        int optionCount = itemOptions != null ? itemOptions.Count : 0;
-        int displayCount = displayableItems != null ? displayableItems.Count : 0;
+        var optionCount = itemOptions != null ? itemOptions.Count : 0;
+        var displayCount = displayableItems != null ? displayableItems.Count : 0;
 
-        for (int i = 0; i < optionCount; ++i) {
+        for (var i = 0; i < optionCount; ++i)
             if (i < displayCount) {
                 var item = displayableItems[i];
-                int amount = 0;
+                var amount = 0;
 
                 if (GameManager.GetInstance() != null)
                     amount = GameManager.GetInstance().GetItemAmount(item.itemName);
 
                 if (itemOptions[i] != null) {
                     itemOptions[i].gameObject.SetActive(true);
-                    itemOptions[i].text = $"{item.itemName} x{amount}";
-                    itemOptions[i].color = (i == itemIndex) ? selectedColor : defaultColor;
+                    itemOptions[i].text = $"{item.itemName} X{amount}";
+                    itemOptions[i].color = i == itemIndex ? selectedColor : defaultColor;
                 }
-            } else {
+            }
+            else {
                 if (itemOptions[i] != null)
                     itemOptions[i].gameObject.SetActive(false);
             }
-        }
     }
 
     // HANDLE METHODS
     private void HandlePlayerChoiceInput() {
-        if (IsActionUnlocked("main")) {
+        if (IsActionUnlocked("main"))
             RegisterLock("main");
-        }
-        else {
+        else
             return;
-        }
 
         if (!isButtonEnabled) return;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
-            if (buttonIndex < buttons.Count - 1) buttonIndex++;
-        }
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if (buttonIndex < buttons.Count - 1)
+                buttonIndex++;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
-            if (buttonIndex > 0) buttonIndex--;
-        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if (buttonIndex > 0)
+                buttonIndex--;
 
         UpdateButtonSprites();
 
@@ -301,26 +306,25 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void HandleQuestionInput() {
-        if (IsActionUnlocked("question")) {
+        if (IsActionUnlocked("question"))
             RegisterLock("question");
-        } else {
+        else
             return;
-        }
 
         if (!isQuestionEnabled) return;
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
-            if (questionButtonIndex < questionButtons.Count - 1) questionButtonIndex++;
-        }
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if (questionButtonIndex < questionButtons.Count - 1)
+                questionButtonIndex++;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
-            if (questionButtonIndex > 0) questionButtonIndex--;
-        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if (questionButtonIndex > 0)
+                questionButtonIndex--;
 
         UpdateQuestionButtonSprites();
 
         if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) return;
-        
+
         isQuestionEnabled = false;
 
         var correct = questionButtonIndex == correctAnswerIndex;
@@ -329,21 +333,22 @@ public class CombatManager : MonoBehaviour {
             enemyImage.gameObject.SetActive(true);
 
         if (enemyImage != null)
-            StartCoroutine(SlideBossImage(previousBossPosition, 0.3f));
+            StartCoroutine(SlideBossImage(previousBossPosition));
 
         if (correct) {
-            int randomIndex = Random.Range(0, currEnemy.correct.Length);
+            var randomIndex = Random.Range(0, currEnemy.correct.Length);
             dialogueText.text = currEnemy.correct[randomIndex];
 
-            var damage = (float) System.Math.Round(20 * damageBar.value);
+            var damage = (float)Math.Round(20 * damageBar.value);
 
             StartCoroutine(HandleDamageAndContinue(damage));
             currEnemyHp -= damage;
-        } else {
+        }
+        else {
             playerLives -= 1;
             playerLivesText.text = playerLives.ToString();
 
-            int randomIndex = Random.Range(0, currEnemy.wrong.Length);
+            var randomIndex = Random.Range(0, currEnemy.wrong.Length);
             dialogueText.text = currEnemy.wrong[randomIndex];
 
             if (playerLives <= 0) {
@@ -380,11 +385,10 @@ public class CombatManager : MonoBehaviour {
     }
 
     private void HandleItemPanelInput() {
-        if (IsActionUnlocked("item")) {
+        if (IsActionUnlocked("item"))
             RegisterLock("item");
-        } else {
+        else
             return;
-        }
 
         if (displayableItems.Count == 0) {
             if (!Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Escape)) return;
@@ -402,13 +406,13 @@ public class CombatManager : MonoBehaviour {
             if (itemIndex < displayableItems.Count - 1) itemIndex++;
             UpdateItemOptions();
         }
+
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
             if (itemIndex > 0) itemIndex--;
             UpdateItemOptions();
         }
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            UseSelectedItem();
-        }
+
+        if (Input.GetKeyDown(KeyCode.Return)) UseSelectedItem();
 
         if (!Input.GetKeyDown(KeyCode.Escape)) {
             RegisterUnlock("item");
@@ -458,9 +462,7 @@ public class CombatManager : MonoBehaviour {
             yield return StartCoroutine(TypeText(currEnemy.dialogue[dialogueIndex].text));
             waitingForEnter = true;
 
-            while (waitingForEnter) {
-                yield return null;
-            }
+            while (waitingForEnter) yield return null;
 
             dialogueIndex++;
         }
@@ -473,7 +475,7 @@ public class CombatManager : MonoBehaviour {
         dialogueText.text = "";
         skipTypewriter = false;
 
-        foreach (char c in fullText) {
+        foreach (var c in fullText) {
             if (skipTypewriter) {
                 dialogueText.text = fullText;
                 break;
@@ -498,9 +500,7 @@ public class CombatManager : MonoBehaviour {
         yield return StartCoroutine(TypeText(tip));
 
         waitingForEnter = true;
-        while (waitingForEnter) {
-            yield return null;
-        }
+        while (waitingForEnter) yield return null;
 
         state = CombatState.PlayerChoice;
         EnablePlayerChoice();
@@ -511,10 +511,11 @@ public class CombatManager : MonoBehaviour {
             yield break;
 
         if (currEnemy.banter != null && currEnemy.banter.Length > 0) {
-            int randomIndex = Random.Range(0, currEnemy.banter.Length);
-            this.dialogueText.text = currEnemy.banter[randomIndex];
-        } else {
-            this.dialogueText.text = "";
+            var randomIndex = Random.Range(0, currEnemy.banter.Length);
+            dialogueText.text = currEnemy.banter[randomIndex];
+        }
+        else {
+            dialogueText.text = "";
         }
 
         var hitClip = Resources.Load<AudioClip>("Audio/Combat/hit");
@@ -525,35 +526,35 @@ public class CombatManager : MonoBehaviour {
 
         isButtonEnabled = false;
 
-        float waitTime = 0.75f;
+        var waitTime = 0.75f;
         while (sfxSource != null && sfxSource.isPlaying && sfxSource.time < waitTime)
             yield return null;
 
         damageText.text = $"-{damageAmount}";
         damageText.gameObject.SetActive(true);
 
-        RectTransform damageRect = damageText.rectTransform;
-        Vector2 damageOriginalPos = damageRect.anchoredPosition;
+        var damageRect = damageText.rectTransform;
+        var damageOriginalPos = damageRect.anchoredPosition;
 
-        RectTransform enemyRect = enemyImage.rectTransform;
-        Vector2 enemyOriginalPos = enemyRect.anchoredPosition;
+        var enemyRect = enemyImage.rectTransform;
+        var enemyOriginalPos = enemyRect.anchoredPosition;
 
-        float bounceDuration = 0.4f;
-        float totalDuration = 1.0f;
-        float jumpHeight = 40f;
-        float shakeAmount = 20f;
-        int shakeCount = 3;
+        var bounceDuration = 0.4f;
+        var totalDuration = 1.0f;
+        var jumpHeight = 40f;
+        var shakeAmount = 20f;
+        var shakeCount = 3;
 
-        float elapsed = 0f;
+        var elapsed = 0f;
 
         while (elapsed < bounceDuration) {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / bounceDuration);
+            var t = Mathf.Clamp01(elapsed / bounceDuration);
 
-            float yOffset = Mathf.Sin(t * Mathf.PI) * jumpHeight;
+            var yOffset = Mathf.Sin(t * Mathf.PI) * jumpHeight;
             damageRect.anchoredPosition = damageOriginalPos + Vector2.up * yOffset;
 
-            float xOffset = Mathf.Sin(t * Mathf.PI * shakeCount) * shakeAmount;
+            var xOffset = Mathf.Sin(t * Mathf.PI * shakeCount) * shakeAmount;
             enemyRect.anchoredPosition = enemyOriginalPos + Vector2.right * xOffset;
 
             yield return null;
@@ -570,21 +571,22 @@ public class CombatManager : MonoBehaviour {
     }
 
     private IEnumerator SlideBossImage(Vector2 targetAnchoredPosition, float duration = 0.3f) {
-        RectTransform enemyRect = enemyImage.rectTransform;
-        Vector2 start = enemyRect.anchoredPosition;
-        float elapsed = 0f;
+        var enemyRect = enemyImage.rectTransform;
+        var start = enemyRect.anchoredPosition;
+        var elapsed = 0f;
 
         while (elapsed < duration) {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
+            var t = Mathf.Clamp01(elapsed / duration);
             enemyRect.anchoredPosition = Vector2.Lerp(start, targetAnchoredPosition, t);
             yield return null;
         }
+
         enemyRect.anchoredPosition = targetAnchoredPosition;
     }
 
     private IEnumerator QuestionTimerRoutine(float duration) {
-        float timer = duration;
+        var timer = duration;
 
         while (timer > 0f) {
             timer -= Time.deltaTime;
@@ -604,24 +606,24 @@ public class CombatManager : MonoBehaviour {
         isButtonEnabled = false;
         isQuestionEnabled = true;
         state = CombatState.Question;
-            
-        List<QuestionData> questionList = new List<QuestionData>();
-        List<Sprite> spriteList = new List<Sprite>();
 
-        foreach (int unitId in currEnemy.unit) {
+        var questionList = new List<QuestionData>();
+        var spriteList = new List<Sprite>();
+
+        foreach (var unitId in currEnemy.unit) {
             Sprite sprite;
-            QuestionData q = QuestionLoader.GetRandomQuestion(unitId, out sprite);
-            
+            var q = QuestionLoader.GetRandomQuestion(unitId, out sprite);
+
             if (q != null) {
                 questionList.Add(q);
                 spriteList.Add(sprite);
             }
         }
 
-        int randomIndex = Random.Range(0, questionList.Count);
+        var randomIndex = Random.Range(0, questionList.Count);
 
         currentQuestion = questionList[randomIndex];
-        Sprite questionSprite = spriteList[randomIndex];
+        var questionSprite = spriteList[randomIndex];
 
         correctAnswerIndex = currentQuestion.correct;
 
@@ -634,9 +636,7 @@ public class CombatManager : MonoBehaviour {
             var panelRect = questionPanel.GetComponent<RectTransform>();
             var imageRect = questionImage.rectTransform;
 
-            if (panelRect != null && imageRect != null) {
-                imageRect.sizeDelta = panelRect.rect.size;
-            }
+            if (panelRect != null && imageRect != null) imageRect.sizeDelta = panelRect.rect.size;
         }
 
         if (questionPanel != null)
@@ -645,15 +645,15 @@ public class CombatManager : MonoBehaviour {
         if (enemyImage != null) {
             enemyImage.gameObject.SetActive(true);
 
-            RectTransform enemyRect = enemyImage.rectTransform;
+            var enemyRect = enemyImage.rectTransform;
 
             previousBossPosition = enemyRect.anchoredPosition;
 
-            float slideAmount = 600f;
-            Vector2 targetPos = previousBossPosition + new Vector2(-slideAmount, 0);
+            var slideAmount = 600f;
+            var targetPos = previousBossPosition + new Vector2(-slideAmount, 0);
 
             StopCoroutine("SlideBossImage");
-            StartCoroutine(SlideBossImage(targetPos, 0.3f));
+            StartCoroutine(SlideBossImage(targetPos));
         }
 
 
@@ -667,12 +667,12 @@ public class CombatManager : MonoBehaviour {
         if (questionTimerCoroutine != null)
             StopCoroutine(questionTimerCoroutine);
 
-        questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine((float) currEnemy.qt));
+        questionTimerCoroutine = StartCoroutine(QuestionTimerRoutine(currEnemy.qt));
 
 
         // TODO: Find better implementation.
         // if (enemyImage != null)
-            // enemyImage.gameObject.SetActive(false);
+        // enemyImage.gameObject.SetActive(false);
 
         questionButtonIndex = 0;
         UpdateQuestionButtonSprites();
@@ -689,12 +689,10 @@ public class CombatManager : MonoBehaviour {
         if (displayableItems.Count == 0) return;
         var selectedItem = displayableItems[itemIndex];
 
-        if (GameManager.GetInstance().GetItemAmount(selectedItem.itemName) <= 0) {
-            return;
-        }
+        if (GameManager.GetInstance().GetItemAmount(selectedItem.itemName) <= 0) return;
 
         // Example: Remove one from inventory
-        GameManager.GetInstance().RemoveItem(selectedItem.itemName, 1);
+        GameManager.GetInstance().RemoveItem(selectedItem.itemName);
 
         // TODO: Apply item effect here (e.g., heal, buff, etc.)
         // For now, just show a message
@@ -738,9 +736,9 @@ public class CombatManager : MonoBehaviour {
 
         state = CombatState.ShowTip;
 
-        int index = UnityEngine.Random.Range(0, currEnemy.unit.Length);
+        var index = Random.Range(0, currEnemy.unit.Length);
         var randomUnit = currEnemy.unit[index];
-        string tip = TipLoader.GetRandomTip(randomUnit);
+        var tip = TipLoader.GetRandomTip(randomUnit);
 
         StartCoroutine(ShowTipCoroutine(tip));
     }
@@ -783,13 +781,10 @@ public class CombatManager : MonoBehaviour {
 
         GameManager.instance.isBattlePlaying = false;
 
-        if (currEnemy.id.ToLower() == "chen" || currEnemy.name.ToLower() == "chen") {
-            Application.Quit();
-        }
+        if (currEnemy.id.ToLower() == "chen" || currEnemy.name.ToLower() == "chen") Application.Quit();
 
-        if (currEnemy.id.ToLower() == "aureli" || currEnemy.name.ToLower() == "aureli") {
-            GameManager.instance.wonGame = true;
-        } 
+        if (currEnemy.id.ToLower() == "aureli" || currEnemy.name.ToLower() == "aureli")
+            GameManager.instance.hasWonGame = true;
 
         SceneManager.LoadScene(GameManager.GetInstance().previousScene);
     }
@@ -800,7 +795,7 @@ public class CombatManager : MonoBehaviour {
 
     // Helper Methods
     private bool IsActionUnlocked(string action) {
-        return actionLocks.TryGetValue(action, out bool unlocked) && unlocked;
+        return actionLocks.TryGetValue(action, out var unlocked) && unlocked;
     }
 
     private void RegisterLock(string action) {
