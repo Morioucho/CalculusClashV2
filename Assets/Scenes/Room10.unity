@@ -6770,7 +6770,7 @@ MonoBehaviour:
     y2: 10
     cameraX: 0
     cameraY: 0
-  bossID: chen
+  bossId: chen
   currentRoom: room10
 --- !u!114 &2017942451
 MonoBehaviour:
