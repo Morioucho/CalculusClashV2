@@ -1,6 +1,7 @@
-[      { "spriteIndex": 1, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
+[      
+  { "spriteIndex": 1, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
   { "spriteIndex": 2, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
-  { "spriteIndex": 3, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
+  { "spriteIndex": 3, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 4, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
   { "spriteIndex": 5, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 6, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
@@ -42,7 +43,7 @@
   { "spriteIndex": 42, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
   { "spriteIndex": 43, "spriteWidth": 128, "spriteHeight": 128, "correct": 1 },
   { "spriteIndex": 44, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
-  { "spriteIndex": 45, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
+  { "spriteIndex": 45, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 46, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
   { "spriteIndex": 47, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 48, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
