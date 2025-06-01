@@ -13,7 +13,7 @@
 
 # Play
 > [!IMPORTANT]
-> The game is not tested on platforms other than Windows, such as macOS or your web browser. There is no gurantee that the game will run as intended.
+> The game is not tested on platforms other than Windows, such as macOS or your web browser. There is no gurantee that the game will run as intended on platforms other than MacOS.
 
 > [!CAUTION]
 > **When you run the game, ensure that you are using Alt + Enter to ensure that you are in full screen! If you are already in full screen, you do not need to do this. This may be fixed in another update but we were unable to complete this feature due other classes finals getting in the way.**
