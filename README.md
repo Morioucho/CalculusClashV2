@@ -12,11 +12,8 @@
 - Controller support
 
 # Play
-> [!IMPORTANT]
-> The game is not tested on platforms other than Windows, such as macOS or your web browser. There is no gurantee that the game will run as intended on platforms other than MacOS.
-
 > [!CAUTION]
-> **When you run the game, ensure that you are using Alt + Enter to ensure that you are in full screen! If you are already in full screen, you do not need to do this. This may be fixed in another update but we were unable to complete this feature due other classes finals getting in the way.**
+> **Make sure that you fullscreen the game when you are playing it!**
 
 **If you wish to play the game, you can download the latest release from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You will have to download the `.zip` file and then right click and unzip to create a folder for the game. Following that, you can run the `CalculusClash.exevX.X.X` (where X is the version number) in the folder. 
 
