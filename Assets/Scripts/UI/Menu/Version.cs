@@ -9,9 +9,11 @@ public class Version : MonoBehaviour {
 
         versionText += "Version: " + GameManager.KVersion;
 
+#pragma warning disable
         if (GameManager.KDevelopmentBuild) {
             versionText += " (DEV) " + GameManager.KBuildDate;
         }
+#pragma warning restore
 
         textBox.text = versionText;
     }

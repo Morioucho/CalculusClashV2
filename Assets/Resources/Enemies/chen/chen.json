@@ -8,8 +8,8 @@
     7,
     8
   ],
-  "health": 400,
-  "qt": 30,
+  "health": 1000,
+  "qt": 15,
   "dialogue": [
     {
       "text": "It's such a beautiful day outside..",

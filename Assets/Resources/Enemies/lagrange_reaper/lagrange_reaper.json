@@ -4,8 +4,8 @@
   "unit": [
     5
   ],
-  "health": 100,
-  "qt": 40,
+  "health": 500,
+  "qt": 10,
   "dialogue": [
     {
       "text": "ThEy cOMpLAiNeD aBoUt LaGrANgE oN tHe AP eXAM...",

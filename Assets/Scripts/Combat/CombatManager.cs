@@ -1,12 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 
 public class CombatManager : MonoBehaviour {
     [SerializeField] 
@@ -170,7 +171,7 @@ public class CombatManager : MonoBehaviour {
         musicSource.loop = true;
         musicSource.volume = currEnemy.musicVolume;
 
-        var bossTheme = Resources.Load<AudioClip>("Audio/EnemyMusic/" + currEnemy.id);
+        var bossTheme = Resources.Load<AudioClip>("Audio/EnemyMusic/" + currEnemy.music.Replace(".mp3", ""));
 
         if (bossTheme != null) {
             musicSource.clip = bossTheme;
@@ -632,10 +633,6 @@ public class CombatManager : MonoBehaviour {
             }
         }
 
-        foreach (var qwu in questionWithUnits) {
-            Debug.Log($"Unit: {qwu.UnitId}, Question SpriteIndex: {qwu.Question.spriteIndex}");
-        }
-
         var randomIndex = Random.Range(0, questionWithUnits.Count);
 
         currentQuestion = questionWithUnits[randomIndex].Question;
@@ -825,10 +822,12 @@ public class CombatManager : MonoBehaviour {
             actionLocks[key] = true;
     }
 
+#pragma warning disable
     private void DebugLocks() {
         return;
 
         foreach (var key in new List<string>(actionLocks.Keys))
             Debug.Log(key + " -> " + actionLocks[key]);
     }
+#pragma warning restore
 }

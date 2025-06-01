@@ -4,7 +4,9 @@ using UnityEngine;
 public class PlayerCamera : MonoBehaviour {
     [SerializeField] public List<Region> regions;
     public GameObject player;
+#pragma warning disable
     public Camera camera;
+#pragma warning restore
 
     public void Update() {
         foreach (var reg in regions) {

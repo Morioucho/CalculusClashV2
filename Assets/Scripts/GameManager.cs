@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     private AudioSource musicSource;
 
-    public const string KVersion = "1.1.0";
+    public const string KVersion = "1.5.0";
     public const string KBuildDate = "05-30-2025";
     public const bool KDevelopmentBuild = false;
     public const int KRoomAmount = 10;
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour {
     public string currentBackgroundMusic;
 
     public float transferPositionX, transferPositionY;
+
+    public int currentRoom = 1;
 
     public Dictionary<string, int> playerItems = new Dictionary<string, int>();
     public Dictionary<string, Position> roomPositions = new Dictionary<string, Position>();
