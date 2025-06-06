@@ -21,7 +21,7 @@
   { "spriteIndex": 20, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 21, "spriteWidth": 128, "spriteHeight": 128, "correct": 3 },
   { "spriteIndex": 22, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
-  { "spriteIndex": 23, "spriteWidth": 128, "spriteHeight": 128, "correct": 2 },
+  { "spriteIndex": 23, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
   { "spriteIndex": 24, "spriteWidth": 128, "spriteHeight": 128, "correct": 0 },
   { "spriteIndex": 25, "spriteWidth": 128, "spriteHeight": 128, "correct": 1 }
 ]
