@@ -15,7 +15,7 @@
 > [!CAUTION]
 > **Make sure that you fullscreen the game when you are playing it!**
 
-**If you wish to play the game, you can download the latest release from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You will have to download the `.zip` file and then right click and unzip to create a folder for the game. Following that, you can run the `CalculusClash.exevX.X.X` (where X is the version number) in the folder. 
+**If you wish to play the game, you can download the latest release from the [releases](https://github.com/Morioucho/CalculusClashV2/releases) page.** You will have to download the `.zip` file and then right click and unzip to create a folder for the game. Following that, you can run the `CalculusClashvX.X.X.exe` (where X is the version number) in the folder. 
 
 You may get a popup from the **Windows Defender Smartscreen** when trying to run the game, in order to get past this, you'll have to hit the `More Info` button and then `Run Anyways`. Windows Defender Smartscreen is software implemented by Windows that checks how new an executable is, it will automatically trigger for new programs such as this one.
 
